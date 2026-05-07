@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'test_screen.dart';
 
 class FaccionesScreen extends StatelessWidget {
   const FaccionesScreen({super.key});
@@ -349,16 +350,16 @@ class FaccionesScreen extends StatelessWidget {
                         height: 0.5,
                         color: Colors.white.withOpacity(0.1),
                       ),
-                      const SizedBox(height: 12),
+                      const SizedBox(height: 16),
                       SizedBox(
                         width: double.infinity,
                         height: 56,
                         child: ElevatedButton(
                           onPressed: () {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('El test comenzará pronto'),
-                                backgroundColor: Color(0xFFD85A30),
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => const TestScreen(),
                               ),
                             );
                           },
