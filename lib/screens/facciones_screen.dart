@@ -10,7 +10,7 @@ class FaccionesScreen extends StatelessWidget {
     {'nombre': 'ERUDICIÓN', 'descripcion': 'La ignorancia es la raíz de todos los males. El conocimiento es la única salvación.', 'color': Color(0xFF185FA5), 'icon': Icons.menu_book},
     {'nombre': 'ABNEGACIÓN', 'descripcion': 'El egoísmo destruye la sociedad. Existir para los demás, no para uno mismo.', 'color': Color(0xFF9E9B94), 'icon': Icons.handshake},
     {'nombre': 'VERDAD', 'descripcion': 'La mentira corrompe todo. La honestidad radical, aunque duela, es el único camino.', 'color': Color(0xFF534AB7), 'icon': Icons.balance},
-    {'nombre': 'AMABILIDAD', 'descripcion': 'La agresión nace de la ignorancia. La paz y la armonía son la respuesta a todo conflicto.', 'color': Color(0xFF3B6D11), 'icon': Icons.spa},
+    {'nombre': 'CORDIALIDAD', 'descripcion': 'La agresión nace de la ignorancia. La paz y la armonía son la respuesta a todo conflicto.', 'color': Color(0xFF3B6D11), 'icon': Icons.spa},
     {'nombre': 'DIVERGENTE', 'descripcion': 'No cabe en una sola caja. Su mente pertenece a varios mundos a la vez, y por eso el sistema los teme.', 'color': Color(0xFFC0A060), 'icon': Icons.all_inclusive},
   ];
 
@@ -119,7 +119,7 @@ class FaccionesScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              // Solo botón X (sin botón cerrar)
+              // Solo botón X
               Positioned(
                 top: -12,
                 right: -12,
@@ -235,7 +235,7 @@ class FaccionesScreen extends StatelessWidget {
                 
                 const SizedBox(height: 20),
 
-                // Grid de 2x3 CON SCROLL - TRANSPARENTE Y DIFUMINADO
+                // Grid de 2x3 CON SCROLL - Solo nombre de facción
                 Expanded(
                   child: SingleChildScrollView(
                     physics: const BouncingScrollPhysics(),
@@ -249,14 +249,13 @@ class FaccionesScreen extends StatelessWidget {
                             crossAxisCount: 2,
                             crossAxisSpacing: 16,
                             mainAxisSpacing: 16,
-                            childAspectRatio: 0.95,
+                            childAspectRatio: 0.9,
                           ),
                           itemCount: facciones.length,
                           itemBuilder: (context, index) {
                             final faccion = facciones[index];
                             final Color colorFaccion = faccion['color'] as Color;
                             final String nombre = faccion['nombre'] as String;
-                            final String descripcion = faccion['descripcion'] as String;
                             final IconData icono = faccion['icon'] as IconData;
                             
                             return GestureDetector(
@@ -295,30 +294,17 @@ class FaccionesScreen extends StatelessWidget {
                                         children: [
                                           Icon(
                                             icono,
-                                            size: 38,
+                                            size: 42,
                                             color: colorFaccion.withOpacity(0.85),
                                           ),
-                                          const SizedBox(height: 10),
+                                          const SizedBox(height: 12),
                                           Text(
                                             nombre,
                                             style: TextStyle(
-                                              fontSize: 13,
+                                              fontSize: 14,
                                               fontWeight: FontWeight.bold,
                                               color: colorFaccion.withOpacity(0.85),
                                               letterSpacing: 1,
-                                            ),
-                                          ),
-                                          const SizedBox(height: 6),
-                                          Padding(
-                                            padding: const EdgeInsets.symmetric(horizontal: 8),
-                                            child: Text(
-                                              descripcion.length > 55 ? '${descripcion.substring(0, 55)}...' : descripcion,
-                                              style: TextStyle(
-                                                fontSize: 10,
-                                                color: Colors.white.withOpacity(0.5),
-                                                height: 1.3,
-                                              ),
-                                              textAlign: TextAlign.center,
                                             ),
                                           ),
                                         ],
