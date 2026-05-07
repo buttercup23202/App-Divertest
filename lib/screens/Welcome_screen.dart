@@ -84,6 +84,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                 ),
                 const SizedBox(height: 50),
 
+                // HEXÁGONO CENTRAL
                 SizedBox(
                   width: 280,
                   height: 280,
@@ -120,8 +121,8 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                                 );
                               },
                               child: Container(
-                                width: 130,
-                                height: 130,
+                                width: 140,
+                                height: 140,
                                 decoration: ShapeDecoration(
                                   shape: const HexagonShape(),
                                   gradient: const LinearGradient(

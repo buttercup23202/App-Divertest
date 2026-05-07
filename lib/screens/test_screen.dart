@@ -28,86 +28,68 @@ class _TestScreenState extends State<TestScreen> {
 
   final List<Map<String, dynamic>> questions = [
     {
-      'id': 'P1',
       'title': 'La mesa',
       'description': 'Frente a ti hay una mesa con tres objetos: un cuchillo, un libro y una mano extendida.',
       'question': '¿Qué haces?',
       'timeLimit': 15,
       'options': [
-        {'text': 'Tomo el cuchillo', 'description': 'Instinto de defensa y poder', 'factionPoints': {'Osadía': 4}, 'color': Color(0xFFD85A30)},
-        {'text': 'Tomo el libro', 'description': 'Instinto de conocer antes de actuar', 'factionPoints': {'Erudición': 4}, 'color': Color(0xFF185FA5)},
-        {'text': 'Tomo la mano', 'description': 'Confiar en otro como primer acto', 'factionPoints': {'Amabilidad': 3, 'Abnegación': 2}, 'color': Color(0xFF3B6D11)},
-        {'text': 'No tomo nada, observo', 'description': 'Observar primero, sin comprometerse', 'factionPoints': {'Verdad': 3, 'Erudición': 1}, 'color': Color(0xFF534AB7)},
+        {'text': 'Tomo el cuchillo', 'desc': 'Instinto de defensa', 'points': {'Osadía': 4}, 'color': Color(0xFFD85A30)},
+        {'text': 'Tomo el libro', 'desc': 'Instinto de conocimiento', 'points': {'Erudición': 4}, 'color': Color(0xFF185FA5)},
+        {'text': 'Tomo la mano', 'desc': 'Confiar en otros', 'points': {'Amabilidad': 3, 'Abnegación': 2}, 'color': Color(0xFF3B6D11)},
+        {'text': 'Observo primero', 'desc': 'Análisis sin acción', 'points': {'Verdad': 3, 'Erudición': 1}, 'color': Color(0xFF534AB7)},
       ],
     },
     {
-      'id': 'P2a',
       'title': 'El perro',
-      'description': 'Caminas por una calle oscura y te encuentras con un perro grande, agresivo, que te bloquea el paso.',
+      'description': 'Te encuentras con un perro grande y agresivo que te bloquea el paso.',
       'question': '¿Cómo actúas?',
       'timeLimit': 15,
       'options': [
-        {'text': 'Lo enfrento directamente', 'description': 'Mostrar valor ante el peligro', 'factionPoints': {'Osadía': 4}, 'color': Color(0xFFD85A30)},
-        {'text': 'Intento calmarlo con calma', 'description': 'Empatía y control emocional', 'factionPoints': {'Amabilidad': 3}, 'color': Color(0xFF3B6D11)},
-        {'text': 'Protejo a quienes están conmigo', 'description': 'Sacrificio por los demás', 'factionPoints': {'Abnegación': 4}, 'color': Color(0xFF9E9B94)},
-        {'text': 'Busco una ruta alternativa', 'description': 'Evitación estratégica', 'factionPoints': {'Erudición': 2, 'Verdad': 1}, 'color': Color(0xFF185FA5)},
+        {'text': 'Lo enfrento', 'desc': 'Valor ante el peligro', 'points': {'Osadía': 4}, 'color': Color(0xFFD85A30)},
+        {'text': 'Lo calmo', 'desc': 'Empatía y control', 'points': {'Amabilidad': 3}, 'color': Color(0xFF3B6D11)},
+        {'text': 'Protejo a otros', 'desc': 'Sacrificio por los demás', 'points': {'Abnegación': 4}, 'color': Color(0xFF9E9B94)},
+        {'text': 'Busco alternativa', 'desc': 'Evitación estratégica', 'points': {'Erudición': 2, 'Verdad': 1}, 'color': Color(0xFF185FA5)},
       ],
     },
     {
-      'id': 'P3a',
       'title': '5 vs 1',
-      'description': 'Tienes que elegir entre salvar a cinco desconocidos o salvar a una persona que conoces y amas.',
+      'description': 'Debes elegir entre salvar a cinco desconocidos o a un ser querido.',
       'question': '¿Qué decides?',
       'timeLimit': 15,
       'options': [
-        {'text': 'Salvo a los cinco', 'description': 'El bien común por encima de todo', 'factionPoints': {'Erudición': 3, 'Abnegación': 2}, 'color': Color(0xFF185FA5)},
-        {'text': 'Salvo al conocido', 'description': 'La lealtad personal es más importante', 'factionPoints': {'Amabilidad': 3, 'Osadía': 1}, 'color': Color(0xFF3B6D11)},
-        {'text': 'Intento salvar a todos', 'description': 'No acepto límites, busco otra solución', 'factionPoints': {'Osadía': 3, 'Divergente': 2}, 'color': Color(0xFFD85A30)},
-        {'text': 'Me paralizo, no puedo decidir', 'description': 'La verdad me abruma', 'factionPoints': {'Verdad': 3, 'Amabilidad': 1}, 'color': Color(0xFF534AB7)},
+        {'text': 'Salvo a los cinco', 'desc': 'Bien común', 'points': {'Erudición': 3, 'Abnegación': 2}, 'color': Color(0xFF185FA5)},
+        {'text': 'Salvo al conocido', 'desc': 'Lealtad personal', 'points': {'Amabilidad': 3, 'Osadía': 1}, 'color': Color(0xFF3B6D11)},
+        {'text': 'Intento salvar a todos', 'desc': 'No acepto límites', 'points': {'Osadía': 3, 'Divergente': 2}, 'color': Color(0xFFD85A30)},
+        {'text': 'No puedo decidir', 'desc': 'La verdad me abruma', 'points': {'Verdad': 3}, 'color': Color(0xFF534AB7)},
       ],
     },
     {
-      'id': 'P3b',
       'title': 'El espejo',
-      'description': 'Te enfrentas a un espejo que refleja una versión perfecta de ti mismo.',
+      'description': 'Un espejo muestra una versión perfecta de ti mismo.',
       'question': '¿Qué haces?',
       'timeLimit': 15,
       'options': [
-        {'text': 'Rompo el espejo', 'description': 'Rechazo la perfección falsa', 'factionPoints': {'Osadía': 3, 'Verdad': 2}, 'color': Color(0xFFD85A30)},
-        {'text': 'Estudio el espejo', 'description': 'Intento entender cómo funciona', 'factionPoints': {'Erudición': 4}, 'color': Color(0xFF185FA5)},
-        {'text': 'Rechazo la imagen', 'description': 'Prefiero mis imperfecciones reales', 'factionPoints': {'Abnegación': 4, 'Verdad': 1}, 'color': Color(0xFF9E9B94)},
-        {'text': 'Pregunto si es real', 'description': 'Busco la verdad antes de actuar', 'factionPoints': {'Verdad': 4}, 'color': Color(0xFF534AB7)},
+        {'text': 'Rompo el espejo', 'desc': 'Rechazo la falsa perfección', 'points': {'Osadía': 3, 'Verdad': 2}, 'color': Color(0xFFD85A30)},
+        {'text': 'Estudio el espejo', 'desc': 'Busco entender', 'points': {'Erudición': 4}, 'color': Color(0xFF185FA5)},
+        {'text': 'Rechazo la imagen', 'desc': 'Prefiero mis imperfecciones', 'points': {'Abnegación': 4}, 'color': Color(0xFF9E9B94)},
+        {'text': 'Pregunto si es real', 'desc': 'Busco la verdad', 'points': {'Verdad': 4}, 'color': Color(0xFF534AB7)},
       ],
     },
     {
-      'id': 'P3c',
       'title': 'El fuego',
-      'description': 'Un incendio se desata. La gente entra en pánico y todos miran hacia ti.',
-      'question': '¿Cómo lideras la crisis?',
+      'description': 'Un incendio se desata. La gente entra en pánico y te mira.',
+      'question': '¿Cómo lideras?',
       'timeLimit': 15,
       'options': [
-        {'text': 'Lidero con firmeza', 'description': 'Tomo el control y doy órdenes claras', 'factionPoints': {'Osadía': 4, 'Abnegación': 1}, 'color': Color(0xFFD85A30)},
-        {'text': 'Diseño un plan estratégico', 'description': 'Analizo y busco la mejor ruta', 'factionPoints': {'Erudición': 4}, 'color': Color(0xFF185FA5)},
-        {'text': 'Ayudo a los vulnerables', 'description': 'Me aseguro de que los débiles salgan primero', 'factionPoints': {'Abnegación': 3, 'Amabilidad': 3}, 'color': Color(0xFF9E9B94)},
-        {'text': 'Busco una salida para todos', 'description': 'Investigo todas las opciones', 'factionPoints': {'Erudición': 3, 'Osadía': 2}, 'color': Color(0xFF185FA5)},
+        {'text': 'Lidero con firmeza', 'desc': 'Control y orden', 'points': {'Osadía': 4}, 'color': Color(0xFFD85A30)},
+        {'text': 'Diseño un plan', 'desc': 'Estrategia', 'points': {'Erudición': 4}, 'color': Color(0xFF185FA5)},
+        {'text': 'Ayudo a los débiles', 'desc': 'Protección', 'points': {'Abnegación': 3, 'Amabilidad': 3}, 'color': Color(0xFF9E9B94)},
+        {'text': 'Busco salida para todos', 'desc': 'Soluciones', 'points': {'Erudición': 3, 'Osadía': 2}, 'color': Color(0xFF185FA5)},
       ],
     },
   ];
 
   Map<String, dynamic> get currentQuestionData => questions[currentQuestion - 1];
-  
-  Color get currentFactionColor {
-    final options = currentQuestionData['options'] as List;
-    for (var option in options) {
-      final points = option['factionPoints'] as Map<String, int>;
-      if (points.containsKey('Osadía')) return const Color(0xFFD85A30);
-      if (points.containsKey('Erudición')) return const Color(0xFF185FA5);
-      if (points.containsKey('Amabilidad')) return const Color(0xFF3B6D11);
-      if (points.containsKey('Abnegación')) return const Color(0xFF9E9B94);
-      if (points.containsKey('Verdad')) return const Color(0xFF534AB7);
-    }
-    return const Color(0xFF185FA5);
-  }
 
   @override
   void initState() {
@@ -124,6 +106,7 @@ class _TestScreenState extends State<TestScreen> {
   void _startTimer() {
     _timeRemaining = currentQuestionData['timeLimit'];
     _isAnswered = false;
+    selectedOption = -1;
     _timer?.cancel();
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (_timeRemaining <= 0 && !_isAnswered) {
@@ -136,41 +119,48 @@ class _TestScreenState extends State<TestScreen> {
   }
 
   void _autoSelectNext() {
+    if (_isAnswered) return;
     _isAnswered = true;
     _timer?.cancel();
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('⏰ Tiempo agotado'), backgroundColor: Color(0xFFD85A30), duration: Duration(seconds: 1)),
-    );
-    Future.delayed(const Duration(seconds: 1), () => _nextOrResults());
+    
+    if (currentQuestion < totalQuestions) {
+      Future.delayed(const Duration(milliseconds: 500), () => _goToNextQuestion());
+    } else {
+      Future.delayed(const Duration(milliseconds: 500), () => _showResults());
+    }
   }
 
   void _selectOption(int index) {
     if (_isAnswered) return;
     final option = currentQuestionData['options'][index];
-    final points = option['factionPoints'] as Map<String, int>;
+    final points = option['points'] as Map<String, int>;
+    
     setState(() {
       selectedOption = index;
       _isAnswered = true;
       _timer?.cancel();
-      points.forEach((faction, value) => totalPoints[faction] = (totalPoints[faction] ?? 0) + value);
+      points.forEach((faction, value) {
+        totalPoints[faction] = (totalPoints[faction] ?? 0) + value;
+      });
     });
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: const Text('✓ Respuesta guardada'), backgroundColor: option['color'], duration: const Duration(milliseconds: 800)),
-    );
-    Future.delayed(const Duration(milliseconds: 800), () => _nextOrResults());
+    
+    // Avance automático después de 1 segundo
+    Future.delayed(const Duration(milliseconds: 800), () {
+      if (currentQuestion < totalQuestions) {
+        _goToNextQuestion();
+      } else {
+        _showResults();
+      }
+    });
   }
 
-  void _nextOrResults() {
-    if (currentQuestion < totalQuestions) {
-      setState(() {
-        currentQuestion++;
-        selectedOption = -1;
-        _isAnswered = false;
-      });
-      _startTimer();
-    } else {
-      _showResults();
-    }
+  void _goToNextQuestion() {
+    setState(() {
+      currentQuestion++;
+      selectedOption = -1;
+      _isAnswered = false;
+    });
+    _startTimer();
   }
 
   void _showResults() {
@@ -179,8 +169,7 @@ class _TestScreenState extends State<TestScreen> {
     final topFaction = sorted.isNotEmpty ? sorted.first.key : 'Divergente';
     final topScore = sorted.isNotEmpty ? sorted.first.value : 0;
     final secondScore = sorted.length > 1 ? sorted[1].value : 0;
-    final highScores = totalPoints.values.where((s) => s >= 6).length;
-    final isDivergent = highScores >= 2 || (secondScore > 0 && topScore - secondScore < 3) || topFaction == 'Divergente';
+    final isDivergent = (topScore - secondScore) < 3 || topFaction == 'Divergente';
     final finalFaction = isDivergent ? 'Divergente' : topFaction;
 
     showDialog(
@@ -188,7 +177,10 @@ class _TestScreenState extends State<TestScreen> {
       barrierDismissible: false,
       builder: (_) => Dialog(
         backgroundColor: const Color(0xFF111E2B),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24), side: BorderSide(color: isDivergent ? const Color(0xFFC0A060) : _getFactionColor(topFaction), width: 2)),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(24),
+          side: BorderSide(color: isDivergent ? const Color(0xFFC0A060) : _getFactionColor(topFaction), width: 2),
+        ),
         child: Container(
           padding: const EdgeInsets.all(24),
           child: Column(
@@ -198,11 +190,7 @@ class _TestScreenState extends State<TestScreen> {
               const SizedBox(height: 20),
               Text(isDivergent ? '¡ERES DIVERGENTE!' : 'PERTENECES A', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, letterSpacing: 2, color: isDivergent ? const Color(0xFFC0A060) : Colors.white)),
               const SizedBox(height: 16),
-              Text(finalFaction, textAlign: TextAlign.center, style: TextStyle(fontSize: finalFaction == 'Divergente' ? 28 : 36, fontWeight: FontWeight.bold, color: _getFactionColor(finalFaction), fontFamily: 'Georgia')),
-              if (isDivergent && topFaction != 'Divergente') ...[
-                const SizedBox(height: 8),
-                Text('Afinidad principal: $topFaction', style: const TextStyle(fontSize: 12, color: Color(0xFF8899AA))),
-              ],
+              Text(finalFaction, textAlign: TextAlign.center, style: TextStyle(fontSize: finalFaction == 'Divergente' ? 28 : 36, fontWeight: FontWeight.bold, color: _getFactionColor(finalFaction))),
               const SizedBox(height: 24),
               SizedBox(
                 width: double.infinity,
@@ -243,7 +231,6 @@ class _TestScreenState extends State<TestScreen> {
   Widget build(BuildContext context) {
     final question = currentQuestionData;
     final options = question['options'] as List;
-    final dominantColor = currentFactionColor;
 
     return Scaffold(
       backgroundColor: const Color(0xFF080F1A),
@@ -251,7 +238,7 @@ class _TestScreenState extends State<TestScreen> {
         children: [
           CustomPaint(
             size: MediaQuery.of(context).size,
-            painter: TestBackgroundPainter(dominantColor: dominantColor),
+            painter: TestBackgroundPainter(),
           ),
           SafeArea(
             child: Column(
@@ -261,27 +248,15 @@ class _TestScreenState extends State<TestScreen> {
                   padding: const EdgeInsets.symmetric(horizontal: 24),
                   child: Row(
                     children: [
-                      GestureDetector(
-                        onTap: _isAnswered ? null : () { _timer?.cancel(); Navigator.pop(context); },
-                        child: Icon(Icons.arrow_back_ios_rounded, size: 18, color: _isAnswered ? Colors.white24 : const Color(0x61FFFFFF)),
-                      ),
-                      const Spacer(),
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
-                        decoration: BoxDecoration(border: Border.all(color: Colors.white10), borderRadius: BorderRadius.circular(20)),
-                        child: Row(
-                          children: [
-                            const Icon(Icons.auto_awesome, size: 10, color: Color(0x4DFFFFFF)),
-                            const SizedBox(width: 6),
-                            Text('TEST DE APTITUD', style: TextStyle(fontSize: 10, letterSpacing: 4, fontWeight: FontWeight.w400, color: const Color(0x66FFFFFF), fontFamily: 'Georgia')),
-                          ],
-                        ),
+                      IconButton(
+                        onPressed: () => Navigator.pop(context),
+                        icon: const Icon(Icons.arrow_back_ios_rounded, size: 18, color: Color(0x61FFFFFF)),
                       ),
                       const Spacer(),
                       Container(
                         width: 40, height: 40,
                         decoration: BoxDecoration(shape: BoxShape.circle, border: Border.all(color: _timeRemaining < 5 ? const Color(0xFFD85A30) : Colors.white24, width: 2)),
-                        child: Center(child: Text('$_timeRemaining', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: _timeRemaining < 5 ? const Color(0xFFD85A30) : Colors.white))),
+                        child: Center(child: Text('$_timeRemaining', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: _timeRemaining < 5 ? const Color(0xFFD85A30) : Colors.white))),
                       ),
                     ],
                   ),
@@ -291,46 +266,25 @@ class _TestScreenState extends State<TestScreen> {
                   padding: const EdgeInsets.symmetric(horizontal: 24),
                   child: Column(
                     children: [
-                      Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          Text('0${currentQuestion}', style: TextStyle(fontSize: 42, fontWeight: FontWeight.w800, color: Colors.white.withOpacity(0.08), fontFamily: 'Georgia')),
-                          Text('PREGUNTA $currentQuestion DE $totalQuestions', style: const TextStyle(fontSize: 10, letterSpacing: 3, color: Color(0x59FFFFFF))),
-                        ],
-                      ),
-                      const SizedBox(height: 12),
                       LinearProgressIndicator(
                         value: currentQuestion / totalQuestions,
                         backgroundColor: Colors.white10,
-                        valueColor: AlwaysStoppedAnimation(dominantColor),
+                        valueColor: const AlwaysStoppedAnimation<Color>(Color(0xFF185FA5)),
                         minHeight: 3,
                         borderRadius: BorderRadius.circular(4),
                       ),
+                      const SizedBox(height: 24),
+                      Text(question['title'], style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w700, color: Colors.white, letterSpacing: 2)),
+                      const SizedBox(height: 16),
+                      Text(question['description'], style: const TextStyle(fontSize: 14, color: Color(0xFF8899AA), height: 1.5), textAlign: TextAlign.center),
+                      const SizedBox(height: 20),
+                      Container(width: 40, height: 1, color: Colors.white24),
+                      const SizedBox(height: 20),
+                      Text(question['question'], style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: Color(0xFFC4D8E8))),
                     ],
                   ),
                 ),
                 const SizedBox(height: 32),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24),
-                  child: Column(
-                    children: [
-                      Text(question['title'], style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600, color: Colors.white, fontFamily: 'Georgia')),
-                      const SizedBox(height: 12),
-                      Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                        Container(width: 30, height: 1, color: Colors.white24),
-                        const SizedBox(width: 8),
-                        Text('◆', style: TextStyle(fontSize: 8, color: Colors.white38)),
-                        const SizedBox(width: 8),
-                        Container(width: 30, height: 1, color: Colors.white24),
-                      ]),
-                      const SizedBox(height: 12),
-                      Text(question['description'], style: const TextStyle(fontSize: 14, color: Color(0xFF8899AA), height: 1.7), textAlign: TextAlign.center),
-                      const SizedBox(height: 12),
-                      Text(question['question'], style: TextStyle(fontSize: 13, letterSpacing: 2, color: Colors.white54, fontFamily: 'Georgia')),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 24),
                 Expanded(
                   child: ListView.separated(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -345,33 +299,32 @@ class _TestScreenState extends State<TestScreen> {
                         child: AnimatedContainer(
                           duration: const Duration(milliseconds: 200),
                           decoration: BoxDecoration(
-                            color: isSelected ? optColor.withOpacity(0.15) : const Color(0xFF0D1820),
+                            color: isSelected ? optColor.withOpacity(0.2) : const Color(0xFF0D1820),
                             borderRadius: BorderRadius.circular(16),
                             border: Border.all(color: isSelected ? optColor : Colors.white.withOpacity(0.1), width: isSelected ? 1.5 : 1),
-                            boxShadow: isSelected ? [BoxShadow(color: optColor.withOpacity(0.3), blurRadius: 16, spreadRadius: -2)] : null,
+                            boxShadow: isSelected ? [BoxShadow(color: optColor.withOpacity(0.3), blurRadius: 16)] : null,
                           ),
                           child: Padding(
                             padding: const EdgeInsets.all(18),
                             child: Row(
                               children: [
-                                AnimatedContainer(
-                                  duration: const Duration(milliseconds: 200),
-                                  width: 22, height: 22,
+                                Container(
+                                  width: 24, height: 24,
                                   decoration: BoxDecoration(
                                     shape: BoxShape.circle,
-                                    border: Border.all(color: isSelected ? optColor : Colors.white24, width: 1.5),
+                                    border: Border.all(color: isSelected ? optColor : Colors.white24, width: 2),
                                     color: isSelected ? optColor : Colors.transparent,
                                   ),
-                                  child: isSelected ? const Icon(Icons.check_rounded, size: 14, color: Colors.white) : null,
+                                  child: isSelected ? const Icon(Icons.check, size: 16, color: Colors.white) : null,
                                 ),
-                                const SizedBox(width: 14),
+                                const SizedBox(width: 16),
                                 Expanded(
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      Text(option['text'], style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: isSelected ? optColor : Colors.white)),
+                                      Text(option['text'], style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: isSelected ? optColor : Colors.white)),
                                       const SizedBox(height: 4),
-                                      Text(option['description'], style: const TextStyle(fontSize: 12, color: Color(0xFF6A7A8A))),
+                                      Text(option['desc'], style: const TextStyle(fontSize: 12, color: Color(0xFF6A7A8A))),
                                     ],
                                   ),
                                 ),
@@ -383,35 +336,7 @@ class _TestScreenState extends State<TestScreen> {
                     },
                   ),
                 ),
-                AnimatedOpacity(
-                  opacity: selectedOption != -1 ? 1.0 : 0.0,
-                  duration: const Duration(milliseconds: 300),
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 0, 20, 32),
-                    child: GestureDetector(
-                      onTap: _nextOrResults,
-                      child: Container(
-                        height: 56,
-                        decoration: BoxDecoration(
-                          gradient: const LinearGradient(colors: [Color(0xFF1A3050), Color(0xFF0D1E30)]),
-                          borderRadius: BorderRadius.circular(16),
-                          border: Border.all(color: Colors.white.withOpacity(0.15), width: 1),
-                          boxShadow: [BoxShadow(color: const Color(0xFF185FA5).withOpacity(0.2), blurRadius: 20)],
-                        ),
-                        child: const Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(Icons.hexagon_outlined, size: 16, color: Color(0x4DFFFFFF)),
-                            SizedBox(width: 8),
-                            Text('SIGUIENTE', style: TextStyle(fontSize: 13, letterSpacing: 3, color: Colors.white)),
-                            SizedBox(width: 8),
-                            Icon(Icons.arrow_forward_rounded, size: 16, color: Color(0x80FFFFFF)),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
+                const SizedBox(height: 20),
               ],
             ),
           ),
@@ -422,20 +347,16 @@ class _TestScreenState extends State<TestScreen> {
 }
 
 class TestBackgroundPainter extends CustomPainter {
-  final Color dominantColor;
-  TestBackgroundPainter({required this.dominantColor});
-
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()..maskFilter = const MaskFilter.blur(BlurStyle.normal, 140.0);
-    paint.color = dominantColor.withOpacity(0.15);
+    paint.color = const Color(0xFF185FA5).withOpacity(0.15);
     canvas.drawCircle(Offset(size.width * 0.2, size.height * 0.2), 180, paint);
     paint.color = const Color(0xFF534AB7).withOpacity(0.10);
     canvas.drawCircle(Offset(size.width * 0.8, size.height * 0.5), 150, paint);
     paint.color = const Color(0xFFD85A30).withOpacity(0.08);
     canvas.drawCircle(Offset(size.width * 0.5, size.height), 160, paint);
   }
-
   @override
-  bool shouldRepaint(covariant TestBackgroundPainter oldDelegate) => false;
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }

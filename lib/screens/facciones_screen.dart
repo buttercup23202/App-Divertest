@@ -5,52 +5,18 @@ class FaccionesScreen extends StatelessWidget {
   const FaccionesScreen({super.key});
 
   final List<Map<String, dynamic>> facciones = const [
-    {
-      'nombre': 'Osadía',
-      'desc': 'El miedo es el enemigo. Vivir es conquistarlo cada día.',
-      'lema': 'AUDACES FORTUNA IUVAT',
-      'color': Color(0xFFD85A30),
-      'icon': Icons.bolt,
-    },
-    {
-      'nombre': 'Erudición',
-      'desc': 'La ignorancia es la raíz de todos los males. El conocimiento es la única salvación.',
-      'lema': 'PALLAS ATENA',
-      'color': Color(0xFF185FA5),
-      'icon': Icons.menu_book_outlined,
-    },
-    {
-      'nombre': 'Abnegación',
-      'desc': 'El egoísmo destruye la sociedad. Existir para los demás, no para uno mismo.',
-      'lema': 'ABNEGATIO IN AETERNA',
-      'color': Color(0xFF9E9B94),
-      'icon': Icons.volunteer_activism_outlined,
-    },
-    {
-      'nombre': 'Verdad',
-      'desc': 'La mentira corrompe todo. La honestidad radical, aunque duela, es el único camino.',
-      'lema': 'VERITAS ET LUX',
-      'color': Color(0xFF534AB7),
-      'icon': Icons.balance_outlined,
-    },
-    {
-      'nombre': 'Amabilidad',
-      'desc': 'La agresión nace de la ignorancia. La paz y la armonía son la respuesta a todo conflicto.',
-      'lema': 'PAX ET CONCORDIA',
-      'color': Color(0xFF3B6D11),
-      'icon': Icons.spa_outlined,
-    },
-    {
-      'nombre': 'Divergente',
-      'desc': 'No cabe en una sola caja. Su mente pertenece a varios mundos a la vez, y por eso el sistema los teme.',
-      'lema': 'SINE FACTIONE',
-      'color': Color(0xFFC0A060),
-      'icon': Icons.all_inclusive_outlined,
-    },
+    {'nombre': 'OSADÍA', 'desc': 'El miedo es el enemigo', 'color': Color(0xFFD85A30), 'icon': Icons.bolt},
+    {'nombre': 'ERUDICIÓN', 'desc': 'El conocimiento es poder', 'color': Color(0xFF185FA5), 'icon': Icons.menu_book},
+    {'nombre': 'ABNEGACIÓN', 'desc': 'Vivir para servir', 'color': Color(0xFF9E9B94), 'icon': Icons.handshake},
+    {'nombre': 'VERDAD', 'desc': 'La honestidad ante todo', 'color': Color(0xFF534AB7), 'icon': Icons.balance},
+    {'nombre': 'AMABILIDAD', 'desc': 'La paz es el camino', 'color': Color(0xFF3B6D11), 'icon': Icons.spa},
+    {'nombre': 'DIVERGENTE', 'desc': 'No cabes en una sola caja', 'color': Color(0xFFC0A060), 'icon': Icons.all_inclusive},
   ];
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    
     return Scaffold(
       backgroundColor: const Color(0xFF080F1A),
       body: Stack(
@@ -58,298 +24,186 @@ class FaccionesScreen extends StatelessWidget {
           // Fondo con blobs difusos
           CustomPaint(
             size: MediaQuery.of(context).size,
-            painter: FactionsBackgroundPainter(),
+            painter: AuroraBackgroundPainter(),
           ),
-
+          
+          // Letras flotantes de fondo
+          ...List.generate(15, (index) => FloatingText(index)),
+          
           SafeArea(
-            child: Column(
-              children: [
-                const SizedBox(height: 48),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Column(
+                children: [
+                  const SizedBox(height: 16),
 
-                // Header con flecha back
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24),
-                  child: Row(
+                  // Botón de volver
+                  Row(
                     children: [
-                      GestureDetector(
-                        onTap: () => Navigator.pop(context),
-                        child: Container(
-                          padding: const EdgeInsets.all(8),
-                          child: const Icon(
-                            Icons.arrow_back_ios_rounded,
-                            size: 18,
-                            color: Color(0x61FFFFFF),
-                          ),
-                        ),
+                      IconButton(
+                        onPressed: () => Navigator.pop(context),
+                        icon: const Icon(Icons.arrow_back_ios, size: 18, color: Color(0xFF7A8FA6)),
                       ),
                       const Spacer(),
-                      // Píldora sutil
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 14,
-                          vertical: 6,
-                        ),
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.white10),
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const Icon(
-                              Icons.auto_awesome,
-                              size: 10,
-                              color: Color(0x4DFFFFFF),
-                            ),
-                            const SizedBox(width: 6),
-                            Text(
-                              'LAS FACCIONES',
-                              style: TextStyle(
-                                fontSize: 10,
-                                letterSpacing: 4,
-                                fontWeight: FontWeight.w400,
-                                color: const Color(0x66FFFFFF),
-                                fontFamily: 'Georgia',
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const Spacer(),
-                      const SizedBox(width: 50),
                     ],
                   ),
-                ),
+                  
+                  const SizedBox(height: 8),
 
-                const SizedBox(height: 12),
-
-                // Título principal
-                Text(
-                  'Conoce tu mundo',
-                  style: TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.white,
-                    letterSpacing: 1,
-                    fontFamily: 'Georgia',
-                  ),
-                ),
-
-                const SizedBox(height: 12),
-
-                // Separador diamante
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      width: 30,
-                      height: 1,
-                      color: Colors.white.withOpacity(0.2),
-                    ),
-                    const SizedBox(width: 8),
-                    Text(
-                      '◆',
-                      style: TextStyle(
-                        fontSize: 8,
-                        color: Colors.white.withOpacity(0.3),
+                  // Header
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(Icons.auto_awesome, size: 12, color: Color(0x4D7A8FA6)),
+                      const SizedBox(width: 6),
+                      Text(
+                        'LAS FACCIONES',
+                        style: TextStyle(
+                          fontSize: 10,
+                          letterSpacing: 4,
+                          fontWeight: FontWeight.w300,
+                          color: const Color(0xFF7A8FA6),
+                        ),
                       ),
+                    ],
+                  ),
+                  
+                  const SizedBox(height: 6),
+                  
+                  ShaderMask(
+                    shaderCallback: (bounds) => const LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [Color(0xFFFFFFFF), Color(0xFF8FA8C0)],
+                    ).createShader(Rect.fromLTWH(0, 0, bounds.width, bounds.height)),
+                    child: const Text(
+                      'Conoce tu mundo',
+                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700, color: Colors.white),
                     ),
-                    const SizedBox(width: 8),
-                    Container(
-                      width: 30,
-                      height: 1,
-                      color: Colors.white.withOpacity(0.2),
-                    ),
-                  ],
-                ),
+                  ),
+                  
+                  const SizedBox(height: 8),
+                  
+                  // Línea decorativa
+                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                    Container(width: 30, height: 1, color: Colors.white.withOpacity(0.2)),
+                    const SizedBox(width: 6),
+                    const Text('◆', style: TextStyle(fontSize: 7, color: Colors.white30)),
+                    const SizedBox(width: 6),
+                    Container(width: 30, height: 1, color: Colors.white.withOpacity(0.2)),
+                  ]),
+                  
+                  const SizedBox(height: 20),
 
-                const SizedBox(height: 32),
-
-                // Lista de facciones
-                Expanded(
-                  child: ListView.builder(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    itemCount: facciones.length,
-                    itemBuilder: (context, index) {
-                      final faccion = facciones[index];
-                      final Color colorFaccion = faccion['color'] as Color;
-                      final String nombre = faccion['nombre'] as String;
-                      final String descripcion = faccion['desc'] as String;
-                      final String lema = faccion['lema'] as String;
-                      final IconData icono = faccion['icon'] as IconData;
-
-                      return Padding(
-                        padding: const EdgeInsets.only(bottom: 10),
-                        child: Container(
-                          height: 100,
-                          decoration: BoxDecoration(
-                            gradient: const LinearGradient(
-                              begin: Alignment.centerLeft,
-                              end: Alignment.centerRight,
-                              colors: [
-                                Color(0xFF0D1E30),
-                                Color(0xFF080F1A),
-                              ],
-                            ),
-                            borderRadius: BorderRadius.circular(20),
-                            border: Border.all(
-                              color: colorFaccion.withOpacity(0.2),
-                              width: 1,
-                            ),
-                            boxShadow: [
-                              BoxShadow(
-                                color: colorFaccion.withOpacity(0.1),
-                                blurRadius: 24,
-                                spreadRadius: 0,
-                              ),
-                            ],
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 20),
-                            child: Row(
-                              children: [
-                                // Icono grande
-                                Container(
-                                  width: 64,
-                                  height: 64,
+                  // Grid de facciones TAMAÑO REDUCIDO - 2 columnas, 3 filas
+                  SizedBox(
+                    height: screenHeight * 0.55,
+                    child: GridView.builder(
+                      physics: const NeverScrollableScrollPhysics(),
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        crossAxisSpacing: 12,
+                        mainAxisSpacing: 12,
+                        childAspectRatio: 1.2,
+                      ),
+                      itemCount: facciones.length,
+                      itemBuilder: (context, index) {
+                        final faccion = facciones[index];
+                        final Color colorFaccion = faccion['color'] as Color;
+                        final String nombre = faccion['nombre'] as String;
+                        final String desc = faccion['desc'] as String;
+                        final IconData icono = faccion['icon'] as IconData;
+                        
+                        return TweenAnimationBuilder(
+                          tween: Tween<double>(begin: 0, end: 1),
+                          duration: Duration(milliseconds: 400 + (index * 80)),
+                          builder: (context, double value, child) {
+                            return Transform.scale(
+                              scale: value,
+                              child: Opacity(
+                                opacity: value,
+                                child: Container(
                                   decoration: BoxDecoration(
                                     gradient: LinearGradient(
                                       begin: Alignment.topLeft,
                                       end: Alignment.bottomRight,
                                       colors: [
                                         colorFaccion.withOpacity(0.3),
-                                        colorFaccion.withOpacity(0.08),
+                                        colorFaccion.withOpacity(0.12),
                                       ],
                                     ),
                                     borderRadius: BorderRadius.circular(16),
-                                    border: Border.all(
-                                      color: colorFaccion.withOpacity(0.5),
-                                      width: 1,
-                                    ),
+                                    border: Border.all(color: colorFaccion.withOpacity(0.4), width: 1),
+                                    boxShadow: [
+                                      BoxShadow(color: colorFaccion.withOpacity(0.15), blurRadius: 12, spreadRadius: 0),
+                                    ],
                                   ),
-                                  child: Icon(
-                                    icono,
-                                    size: 30,
-                                    color: colorFaccion,
-                                  ),
-                                ),
-                                const SizedBox(width: 18),
-                                // Textos
-                                Expanded(
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      Text(
-                                        lema,
-                                        style: TextStyle(
-                                          fontSize: 9,
-                                          letterSpacing: 2,
-                                          fontWeight: FontWeight.w500,
-                                          color: colorFaccion.withOpacity(0.6),
-                                        ),
-                                      ),
-                                      const SizedBox(height: 4),
+                                      Icon(icono, size: 32, color: colorFaccion),
+                                      const SizedBox(height: 8),
                                       Text(
                                         nombre,
                                         style: TextStyle(
-                                          fontSize: 17,
-                                          fontWeight: FontWeight.w700,
+                                          fontSize: 13,
+                                          fontWeight: FontWeight.bold,
                                           color: colorFaccion,
-                                          fontFamily: 'Georgia',
+                                          letterSpacing: 1,
                                         ),
                                       ),
-                                      const SizedBox(height: 6),
-                                      Text(
-                                        descripcion,
-                                        style: const TextStyle(
-                                          fontSize: 12,
-                                          color: Color(0xFF7A8FA6),
-                                          height: 1.5,
+                                      const SizedBox(height: 4),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                                        child: Text(
+                                          desc,
+                                          style: const TextStyle(fontSize: 9, color: Color(0xFF8899AA)),
+                                          textAlign: TextAlign.center,
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
                                         ),
-                                        maxLines: 2,
-                                        overflow: TextOverflow.ellipsis,
                                       ),
                                     ],
                                   ),
                                 ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      );
-                    },
+                              ),
+                            );
+                          },
+                        );
+                      },
+                    ),
                   ),
-                ),
 
-                const SizedBox(height: 16),
+                  const Spacer(),
 
-                // Botón COMENZAR TEST
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 32),
-                  child: GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => const TestScreen(),
+                  // Botón COMENZAR TEST
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 20),
+                    child: GestureDetector(
+                      onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const TestScreen())),
+                      child: Container(
+                        height: 50,
+                        decoration: BoxDecoration(
+                          gradient: const LinearGradient(colors: [Color(0xFF1A2E42), Color(0xFF0F1E2E)]),
+                          borderRadius: BorderRadius.circular(14),
+                          border: Border.all(color: Colors.white.withOpacity(0.15), width: 1),
+                          boxShadow: [BoxShadow(color: const Color(0xFF185FA5).withOpacity(0.2), blurRadius: 16)],
                         ),
-                      );
-                    },
-                    child: Container(
-                      height: 60,
-                      decoration: BoxDecoration(
-                        gradient: const LinearGradient(
-                          begin: Alignment.centerLeft,
-                          end: Alignment.centerRight,
-                          colors: [
-                            Color(0xFF1A3050),
-                            Color(0xFF0D1E30),
+                        child: const Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.hexagon_outlined, size: 14, color: Color(0x4DFFFFFF)),
+                            SizedBox(width: 8),
+                            Text('COMENZAR TEST', style: TextStyle(fontSize: 11, letterSpacing: 3, fontWeight: FontWeight.w500, color: Colors.white)),
+                            SizedBox(width: 8),
+                            Icon(Icons.arrow_forward_rounded, size: 14, color: Color(0x80FFFFFF)),
                           ],
                         ),
-                        borderRadius: BorderRadius.circular(16),
-                        border: Border.all(
-                          color: Colors.white.withOpacity(0.15),
-                          width: 1,
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: const Color(0xFF185FA5).withOpacity(0.2),
-                            blurRadius: 20,
-                            spreadRadius: 0,
-                          ),
-                        ],
-                      ),
-                      child: const Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.hexagon_outlined,
-                            size: 16,
-                            color: Color(0x4DFFFFFF),
-                          ),
-                          SizedBox(width: 8),
-                          Text(
-                            'COMENZAR TEST',
-                            style: TextStyle(
-                              fontSize: 13,
-                              letterSpacing: 3,
-                              fontWeight: FontWeight.w500,
-                              color: Colors.white,
-                            ),
-                          ),
-                          SizedBox(width: 8),
-                          Icon(
-                            Icons.arrow_forward_rounded,
-                            size: 16,
-                            color: Color(0x80FFFFFF),
-                          ),
-                        ],
                       ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ],
@@ -358,24 +212,50 @@ class FaccionesScreen extends StatelessWidget {
   }
 }
 
-class FactionsBackgroundPainter extends CustomPainter {
+class FloatingText extends StatelessWidget {
+  final int index;
+  const FloatingText(this.index, {super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final texts = ['⚡', '📖', '🤝', '⚖️', '🌿', '∞'];
+    final text = texts[index % texts.length];
+    final size = MediaQuery.of(context).size;
+    final left = (index * 37) % (size.width - 50);
+    final top = (index * 23) % (size.height - 100);
+    
+    return TweenAnimationBuilder(
+      tween: Tween<double>(begin: 0, end: 1),
+      duration: Duration(seconds: 4 + (index % 3)),
+      curve: Curves.easeInOut,
+      builder: (context, double value, child) {
+        return Positioned(
+          left: left,
+          top: top - (value * 30),
+          child: Opacity(
+            opacity: 0.12,
+            child: Text(
+              text,
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w300, color: Colors.white),
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
+
+class AuroraBackgroundPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 140.0);
-
-    paint.color = const Color(0xFF185FA5).withOpacity(0.15);
-    canvas.drawCircle(Offset(0, 0), 180, paint);
-
-    paint.color = const Color(0xFF534AB7).withOpacity(0.10);
-    canvas.drawCircle(
-      Offset(size.width * 0.7, size.height * 0.4), 150, paint);
-
-    paint.color = const Color(0xFFD85A30).withOpacity(0.08);
-    canvas.drawCircle(
-      Offset(size.width * 0.3, size.height), 160, paint);
+    final paint = Paint()..maskFilter = const MaskFilter.blur(BlurStyle.normal, 120.0);
+    paint.color = const Color(0xFF185FA5).withOpacity(0.18);
+    canvas.drawCircle(const Offset(0, 0), 180, paint);
+    paint.color = const Color(0xFF534AB7).withOpacity(0.12);
+    canvas.drawCircle(Offset(size.width, size.height * 0.4), 150, paint);
+    paint.color = const Color(0xFFD85A30).withOpacity(0.10);
+    canvas.drawCircle(Offset(0, size.height), 130, paint);
   }
-
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }

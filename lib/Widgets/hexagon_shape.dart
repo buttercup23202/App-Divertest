@@ -12,6 +12,7 @@ class HexagonShape extends ShapeBorder {
     final double height = rect.height;
     final double side = width / 2;
     final Path path = Path();
+    
     path.moveTo(rect.left + side, rect.top);
     path.lineTo(rect.right, rect.top + height * 0.25);
     path.lineTo(rect.right, rect.top + height * 0.75);
@@ -19,6 +20,7 @@ class HexagonShape extends ShapeBorder {
     path.lineTo(rect.left, rect.top + height * 0.75);
     path.lineTo(rect.left, rect.top + height * 0.25);
     path.close();
+    
     return path;
   }
 
