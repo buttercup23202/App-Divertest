@@ -11,10 +11,10 @@ class TestScreen extends StatefulWidget {
 class _TestScreenState extends State<TestScreen> {
   int selectedOption = -1;
   int currentQuestion = 1;
-  final int totalQuestions = 2;
+  final int totalQuestions = 3;
   
   Timer? _timer;
-  int _timeRemaining = 30;
+  int _timeRemaining = 15;
   bool _isAnswered = false;
   
   // Puntuación acumulada
@@ -35,7 +35,7 @@ class _TestScreenState extends State<TestScreen> {
       'description': 'Frente a ti hay una mesa con tres objetos: un cuchillo, un libro y una mano extendida.',
       'question': '¿Qué haces?',
       'imageIcon': Icons.table_restaurant,
-      'timeLimit': 30,
+      'timeLimit': 15,
       'options': [
         {
           'text': 'Tomo el cuchillo',
@@ -69,7 +69,7 @@ class _TestScreenState extends State<TestScreen> {
       'description': 'Caminas por una calle oscura y te encuentras con un perro grande, agresivo, que te bloquea el paso. No hay salida fácil.',
       'question': '¿Cómo actúas?',
       'imageIcon': Icons.pets,
-      'timeLimit': 30,
+      'timeLimit': 15,
       'options': [
         {
           'text': 'Lo enfrento directamente',
@@ -94,6 +94,40 @@ class _TestScreenState extends State<TestScreen> {
           'description': 'Evitación estratégica',
           'factionPoints': {'Erudición': 2, 'Verdad': 1},
           'color': Color(0xFF185FA5),
+        },
+      ],
+    },
+    {
+      'id': 'P3a',
+      'title': '5 vs 1',
+      'description': 'Una situación extrema. Tienes que elegir entre salvar a cinco desconocidos o salvar a una persona que conoces y amas.',
+      'question': '¿Qué decides?',
+      'imageIcon': Icons.balance,
+      'timeLimit': 15,
+      'options': [
+        {
+          'text': 'Salvo a los cinco',
+          'description': 'El bien común por encima de todo',
+          'factionPoints': {'Erudición': 3, 'Abnegación': 2},
+          'color': Color(0xFF185FA5),
+        },
+        {
+          'text': 'Salvo al conocido',
+          'description': 'La lealtad personal es más importante',
+          'factionPoints': {'Amabilidad': 3, 'Osadía': 1},
+          'color': Color(0xFF3B6D11),
+        },
+        {
+          'text': 'Intento salvar a todos',
+          'description': 'No acepto límites, busco otra solución',
+          'factionPoints': {'Osadía': 3, 'Divergente': 2},
+          'color': Color(0xFFD85A30),
+        },
+        {
+          'text': 'Me paralizo, no puedo decidir',
+          'description': 'La verdad me abruma',
+          'factionPoints': {'Verdad': 3, 'Amabilidad': 1},
+          'color': Color(0xFF534AB7),
         },
       ],
     },
@@ -138,13 +172,13 @@ class _TestScreenState extends State<TestScreen> {
     
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
-        content: Text('⏰ Tiempo agotado. Pasando a la siguiente pregunta...'),
+        content: Text('⏰ Tiempo agotado'),
         backgroundColor: Color(0xFFD85A30),
-        duration: Duration(seconds: 2),
+        duration: Duration(seconds: 1),
       ),
     );
     
-    Future.delayed(const Duration(seconds: 2), () {
+    Future.delayed(const Duration(seconds: 1), () {
       if (currentQuestion < totalQuestions) {
         _goToNextQuestion();
       } else {
@@ -159,30 +193,29 @@ class _TestScreenState extends State<TestScreen> {
     final option = currentQuestionData['options'][index];
     final points = option['factionPoints'] as Map<String, int>;
     final Color optionColor = option['color'] as Color;
-    final int pointsValue = points.values.first;
     
     setState(() {
       selectedOption = index;
       _isAnswered = true;
       _timer?.cancel();
       
-      // Acumular puntos
+      // Acumular puntos (sin mostrar mensaje)
       points.forEach((faction, value) {
         totalPoints[faction] = (totalPoints[faction] ?? 0) + value;
       });
     });
     
-    // Mostrar feedback con la variable correcta
+    // Mostrar solo feedback visual sin puntos
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text('✓ Respuesta guardada. +$pointsValue pts'),
+        content: const Text('✓ Respuesta guardada'),
         backgroundColor: optionColor,
-        duration: const Duration(seconds: 1),
+        duration: const Duration(milliseconds: 800),
       ),
     );
     
-    // Esperar un momento y pasar a la siguiente
-    Future.delayed(const Duration(seconds: 1), () {
+    // Esperar y pasar a la siguiente
+    Future.delayed(const Duration(milliseconds: 800), () {
       if (currentQuestion < totalQuestions) {
         _goToNextQuestion();
       } else {
@@ -204,7 +237,7 @@ class _TestScreenState extends State<TestScreen> {
     // Encontrar la facción con mayor puntuación
     String topFaction = totalPoints.entries.reduce((a, b) => a.value > b.value ? a : b).key;
     
-    // Verificar si es Divergente (puntuación alta en 2+ facciones)
+    // Verificar si es Divergente (puntuación en 2+ facciones)
     int highScoresCount = totalPoints.values.where((score) => score >= 4).length;
     bool isDivergent = highScoresCount >= 2;
     
@@ -259,9 +292,9 @@ class _TestScreenState extends State<TestScreen> {
                   color: Colors.white.withOpacity(0.1),
                 ),
                 const SizedBox(height: 16),
-                Text(
+                const Text(
                   'Puntuación obtenida:',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 12,
                     color: Color(0xFF8899AA),
                   ),
@@ -302,8 +335,8 @@ class _TestScreenState extends State<TestScreen> {
                   child: ElevatedButton(
                     onPressed: () {
                       Navigator.pop(context);
-                      Navigator.pop(context); // Volver a FaccionesScreen
-                      Navigator.pop(context); // Volver a WelcomeScreen
+                      Navigator.pop(context);
+                      Navigator.pop(context);
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: isDivergent 
@@ -354,22 +387,18 @@ class _TestScreenState extends State<TestScreen> {
       backgroundColor: const Color(0xFF080F1A),
       body: Stack(
         children: [
-          // Fondo con círculos difusos
           CustomPaint(
             size: MediaQuery.of(context).size,
             painter: TestBackgroundPainter(),
           ),
 
-          // Contenido principal
           SafeArea(
             child: Column(
               children: [
-                // Header con progreso y tiempo
                 Padding(
                   padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
                   child: Row(
                     children: [
-                      // Botón de volver
                       IconButton(
                         onPressed: _isAnswered ? null : () {
                           _timer?.cancel();
@@ -384,7 +413,6 @@ class _TestScreenState extends State<TestScreen> {
                         ),
                       ),
                       const Spacer(),
-                      // Indicador de pregunta
                       Container(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 12,
@@ -409,14 +437,13 @@ class _TestScreenState extends State<TestScreen> {
                         ),
                       ),
                       const Spacer(),
-                      // Timer circular
                       Container(
                         width: 40,
                         height: 40,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           border: Border.all(
-                            color: _timeRemaining < 10
+                            color: _timeRemaining < 5
                                 ? const Color(0xFFD85A30)
                                 : const Color(0xFF185FA5),
                             width: 2,
@@ -428,7 +455,7 @@ class _TestScreenState extends State<TestScreen> {
                             style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.bold,
-                              color: _timeRemaining < 10
+                              color: _timeRemaining < 5
                                   ? const Color(0xFFD85A30)
                                   : Colors.white,
                             ),
@@ -441,7 +468,6 @@ class _TestScreenState extends State<TestScreen> {
 
                 const SizedBox(height: 16),
 
-                // Barra de progreso
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: LinearProgressIndicator(
@@ -457,12 +483,10 @@ class _TestScreenState extends State<TestScreen> {
 
                 const SizedBox(height: 32),
 
-                // Título de la pregunta
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Column(
                     children: [
-                      // Icono decorativo
                       Container(
                         width: 60,
                         height: 60,
@@ -528,7 +552,6 @@ class _TestScreenState extends State<TestScreen> {
 
                 const SizedBox(height: 32),
 
-                // Opciones de respuesta
                 Expanded(
                   child: ListView.separated(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -594,7 +617,6 @@ class _TestScreenState extends State<TestScreen> {
                               ),
                               child: Row(
                                 children: [
-                                  // Indicador circular de selección
                                   Container(
                                     width: 24,
                                     height: 24,
@@ -621,7 +643,6 @@ class _TestScreenState extends State<TestScreen> {
                                         : null,
                                   ),
                                   const SizedBox(width: 16),
-                                  // Texto de la opción
                                   Expanded(
                                     child: Column(
                                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -651,7 +672,6 @@ class _TestScreenState extends State<TestScreen> {
                                       ],
                                     ),
                                   ),
-                                  // Check indicador
                                   if (isSelected)
                                     Icon(
                                       Icons.check_circle,
@@ -668,7 +688,6 @@ class _TestScreenState extends State<TestScreen> {
                   ),
                 ),
 
-                // Espacio inferior
                 const SizedBox(height: 20),
               ],
             ),
@@ -679,7 +698,6 @@ class _TestScreenState extends State<TestScreen> {
   }
 }
 
-// Painter para círculos difusos del test
 class TestBackgroundPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
