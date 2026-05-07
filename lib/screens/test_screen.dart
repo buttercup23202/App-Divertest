@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ui';
 import 'package:flutter/material.dart';
 
 class TestScreen extends StatefulWidget {
@@ -144,7 +145,6 @@ class _TestScreenState extends State<TestScreen> {
       });
     });
     
-    // Avance automático después de 1 segundo
     Future.delayed(const Duration(milliseconds: 800), () {
       if (currentQuestion < totalQuestions) {
         _goToNextQuestion();
@@ -171,45 +171,132 @@ class _TestScreenState extends State<TestScreen> {
     final secondScore = sorted.length > 1 ? sorted[1].value : 0;
     final isDivergent = (topScore - secondScore) < 3 || topFaction == 'Divergente';
     final finalFaction = isDivergent ? 'Divergente' : topFaction;
+    final factionColor = _getFactionColor(finalFaction);
 
     showDialog(
       context: context,
       barrierDismissible: false,
       builder: (_) => Dialog(
-        backgroundColor: const Color(0xFF111E2B),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(24),
-          side: BorderSide(color: isDivergent ? const Color(0xFFC0A060) : _getFactionColor(topFaction), width: 2),
-        ),
-        child: Container(
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(isDivergent ? Icons.all_inclusive : Icons.verified, size: 60, color: isDivergent ? const Color(0xFFC0A060) : _getFactionColor(topFaction)),
-              const SizedBox(height: 20),
-              Text(isDivergent ? '¡ERES DIVERGENTE!' : 'PERTENECES A', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, letterSpacing: 2, color: isDivergent ? const Color(0xFFC0A060) : Colors.white)),
-              const SizedBox(height: 16),
-              Text(finalFaction, textAlign: TextAlign.center, style: TextStyle(fontSize: finalFaction == 'Divergente' ? 28 : 36, fontWeight: FontWeight.bold, color: _getFactionColor(finalFaction))),
-              const SizedBox(height: 24),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                    Navigator.pop(context);
-                    Navigator.pop(context);
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: isDivergent ? const Color(0xFFC0A060) : _getFactionColor(topFaction),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                    padding: const EdgeInsets.symmetric(vertical: 14),
+        backgroundColor: Colors.transparent,
+        insetPadding: const EdgeInsets.symmetric(horizontal: 24),
+        child: Stack(
+          clipBehavior: Clip.none,
+          alignment: Alignment.topCenter,
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    factionColor.withOpacity(0.3),
+                    factionColor.withOpacity(0.1),
+                  ],
+                ),
+                borderRadius: BorderRadius.circular(24),
+                border: Border.all(
+                  color: factionColor.withOpacity(0.4),
+                  width: 1,
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: factionColor.withOpacity(0.3),
+                    blurRadius: 24,
+                    spreadRadius: 2,
                   ),
-                  child: const Text('REINICIAR TEST', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, letterSpacing: 2, color: Colors.white)),
+                ],
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(24),
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
+                  child: Container(
+                    padding: const EdgeInsets.fromLTRB(24, 48, 24, 28),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                          width: 70,
+                          height: 70,
+                          decoration: BoxDecoration(
+                            gradient: RadialGradient(
+                              colors: [
+                                factionColor.withOpacity(0.35),
+                                factionColor.withOpacity(0.1),
+                              ],
+                            ),
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: factionColor.withOpacity(0.5),
+                              width: 1.5,
+                            ),
+                          ),
+                          child: Center(
+                            child: Icon(
+                              isDivergent ? Icons.all_inclusive : Icons.verified,
+                              size: 34,
+                              color: factionColor,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                        Text(
+                          isDivergent ? '¡ERES DIVERGENTE!' : 'PERTENECES A',
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 2,
+                            color: Colors.white70,
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        Text(
+                          finalFaction,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: finalFaction == 'Divergente' ? 28 : 36,
+                            fontWeight: FontWeight.bold,
+                            color: factionColor,
+                          ),
+                        ),
+                        const SizedBox(height: 28),
+                      ],
+                    ),
+                  ),
                 ),
               ),
-            ],
-          ),
+            ),
+            Positioned(
+              top: -12,
+              right: -12,
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                },
+                child: Container(
+                  width: 32,
+                  height: 32,
+                  decoration: BoxDecoration(
+                    color: factionColor.withOpacity(0.9),
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: Colors.white.withOpacity(0.3),
+                      width: 1,
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: factionColor.withOpacity(0.5),
+                        blurRadius: 8,
+                      ),
+                    ],
+                  ),
+                  child: const Icon(Icons.close, size: 18, color: Colors.white),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -236,6 +323,7 @@ class _TestScreenState extends State<TestScreen> {
       backgroundColor: const Color(0xFF080F1A),
       body: Stack(
         children: [
+          // Fondo difuminado
           CustomPaint(
             size: MediaQuery.of(context).size,
             painter: TestBackgroundPainter(),
@@ -248,15 +336,33 @@ class _TestScreenState extends State<TestScreen> {
                   padding: const EdgeInsets.symmetric(horizontal: 24),
                   child: Row(
                     children: [
-                      IconButton(
-                        onPressed: () => Navigator.pop(context),
-                        icon: const Icon(Icons.arrow_back_ios_rounded, size: 18, color: Color(0x61FFFFFF)),
+                      GestureDetector(
+                        onTap: () => Navigator.pop(context),
+                        child: Container(
+                          width: 40,
+                          height: 40,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Colors.white.withOpacity(0.05),
+                            border: Border.all(color: Colors.white.withOpacity(0.1)),
+                          ),
+                          child: const Icon(Icons.arrow_back_ios_rounded, size: 18, color: Color(0x61FFFFFF)),
+                        ),
                       ),
                       const Spacer(),
                       Container(
                         width: 40, height: 40,
-                        decoration: BoxDecoration(shape: BoxShape.circle, border: Border.all(color: _timeRemaining < 5 ? const Color(0xFFD85A30) : Colors.white24, width: 2)),
-                        child: Center(child: Text('$_timeRemaining', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: _timeRemaining < 5 ? const Color(0xFFD85A30) : Colors.white))),
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(color: _timeRemaining < 5 ? const Color(0xFFD85A30) : Colors.white24, width: 2),
+                          color: Colors.white.withOpacity(0.05),
+                        ),
+                        child: Center(
+                          child: Text(
+                            '$_timeRemaining',
+                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: _timeRemaining < 5 ? const Color(0xFFD85A30) : Colors.white),
+                          ),
+                        ),
                       ),
                     ],
                   ),
@@ -274,17 +380,37 @@ class _TestScreenState extends State<TestScreen> {
                         borderRadius: BorderRadius.circular(4),
                       ),
                       const SizedBox(height: 24),
-                      Text(question['title'], style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w700, color: Colors.white, letterSpacing: 2)),
+                      Text(
+                        question['title'],
+                        style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w700, color: Colors.white, letterSpacing: 2),
+                      ),
                       const SizedBox(height: 16),
-                      Text(question['description'], style: const TextStyle(fontSize: 14, color: Color(0xFF8899AA), height: 1.5), textAlign: TextAlign.center),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [Colors.white.withOpacity(0.05), Colors.white.withOpacity(0.02)],
+                          ),
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(color: Colors.white.withOpacity(0.1), width: 0.5),
+                        ),
+                        child: Text(
+                          question['description'],
+                          style: const TextStyle(fontSize: 14, color: Color(0xFF8899AA), height: 1.5),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
                       const SizedBox(height: 20),
                       Container(width: 40, height: 1, color: Colors.white24),
                       const SizedBox(height: 20),
-                      Text(question['question'], style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: Color(0xFFC4D8E8))),
+                      Text(
+                        question['question'],
+                        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: Colors.white70),
+                      ),
                     ],
                   ),
                 ),
-                const SizedBox(height: 32),
+                const SizedBox(height: 24),
                 Expanded(
                   child: ListView.separated(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -299,36 +425,61 @@ class _TestScreenState extends State<TestScreen> {
                         child: AnimatedContainer(
                           duration: const Duration(milliseconds: 200),
                           decoration: BoxDecoration(
-                            color: isSelected ? optColor.withOpacity(0.2) : const Color(0xFF0D1820),
+                            gradient: LinearGradient(
+                              colors: isSelected
+                                  ? [optColor.withOpacity(0.2), optColor.withOpacity(0.08)]
+                                  : [Colors.white.withOpacity(0.04), Colors.white.withOpacity(0.02)],
+                            ),
                             borderRadius: BorderRadius.circular(16),
-                            border: Border.all(color: isSelected ? optColor : Colors.white.withOpacity(0.1), width: isSelected ? 1.5 : 1),
-                            boxShadow: isSelected ? [BoxShadow(color: optColor.withOpacity(0.3), blurRadius: 16)] : null,
+                            border: Border.all(
+                              color: isSelected ? optColor.withOpacity(0.4) : Colors.white.withOpacity(0.08),
+                              width: isSelected ? 1.2 : 0.8,
+                            ),
+                            boxShadow: isSelected
+                                ? [BoxShadow(color: optColor.withOpacity(0.2), blurRadius: 16, spreadRadius: -2)]
+                                : null,
                           ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(18),
-                            child: Row(
-                              children: [
-                                Container(
-                                  width: 24, height: 24,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    border: Border.all(color: isSelected ? optColor : Colors.white24, width: 2),
-                                    color: isSelected ? optColor : Colors.transparent,
-                                  ),
-                                  child: isSelected ? const Icon(Icons.check, size: 16, color: Colors.white) : null,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(16),
+                            child: BackdropFilter(
+                              filter: ImageFilter.blur(sigmaX: 4, sigmaY: 4),
+                              child: Padding(
+                                padding: const EdgeInsets.all(16),
+                                child: Row(
+                                  children: [
+                                    Container(
+                                      width: 24, height: 24,
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        border: Border.all(color: isSelected ? optColor : Colors.white24, width: 1.5),
+                                        color: isSelected ? optColor : Colors.transparent,
+                                      ),
+                                      child: isSelected ? const Icon(Icons.check, size: 14, color: Colors.white) : null,
+                                    ),
+                                    const SizedBox(width: 16),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            option['text'],
+                                            style: TextStyle(
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.w600,
+                                              color: isSelected ? optColor : Colors.white,
+                                            ),
+                                          ),
+                                          const SizedBox(height: 4),
+                                          Text(
+                                            option['desc'],
+                                            style: TextStyle(fontSize: 12, color: Colors.white.withOpacity(0.5)),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                                const SizedBox(width: 16),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text(option['text'], style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: isSelected ? optColor : Colors.white)),
-                                      const SizedBox(height: 4),
-                                      Text(option['desc'], style: const TextStyle(fontSize: 12, color: Color(0xFF6A7A8A))),
-                                    ],
-                                  ),
-                                ),
-                              ],
+                              ),
                             ),
                           ),
                         ),
@@ -350,13 +501,14 @@ class TestBackgroundPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()..maskFilter = const MaskFilter.blur(BlurStyle.normal, 140.0);
-    paint.color = const Color(0xFF185FA5).withOpacity(0.15);
+    paint.color = const Color(0xFF185FA5).withOpacity(0.08);
     canvas.drawCircle(Offset(size.width * 0.2, size.height * 0.2), 180, paint);
-    paint.color = const Color(0xFF534AB7).withOpacity(0.10);
+    paint.color = const Color(0xFF534AB7).withOpacity(0.06);
     canvas.drawCircle(Offset(size.width * 0.8, size.height * 0.5), 150, paint);
-    paint.color = const Color(0xFFD85A30).withOpacity(0.08);
+    paint.color = const Color(0xFFD85A30).withOpacity(0.05);
     canvas.drawCircle(Offset(size.width * 0.5, size.height), 160, paint);
   }
+
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
