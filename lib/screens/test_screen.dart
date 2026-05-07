@@ -11,7 +11,7 @@ class TestScreen extends StatefulWidget {
 class _TestScreenState extends State<TestScreen> {
   int selectedOption = -1;
   int currentQuestion = 1;
-  final int totalQuestions = 3;
+  final int totalQuestions = 4;
   
   Timer? _timer;
   int _timeRemaining = 15;
@@ -131,6 +131,40 @@ class _TestScreenState extends State<TestScreen> {
         },
       ],
     },
+    {
+      'id': 'P3b',
+      'title': 'El espejo',
+      'description': 'Te encuentras frente a un espejo que no refleja quién eres, sino una versión perfecta de ti mismo. La imagen te sonríe, perfecta y sin defectos.',
+      'question': '¿Qué haces al ver esa imagen?',
+      'imageIcon': Icons.brightness_5,  // Icono corregido
+      'timeLimit': 15,
+      'options': [
+        {
+          'text': 'Rompo el espejo',
+          'description': 'Rechazo la perfección falsa',
+          'factionPoints': {'Osadía': 3, 'Verdad': 2},
+          'color': Color(0xFFD85A30),
+        },
+        {
+          'text': 'Estudio el espejo',
+          'description': 'Intento entender cómo funciona',
+          'factionPoints': {'Erudición': 4},
+          'color': Color(0xFF185FA5),
+        },
+        {
+          'text': 'Rechazo la imagen',
+          'description': 'Prefiero mis imperfecciones reales',
+          'factionPoints': {'Abnegación': 4, 'Verdad': 1},
+          'color': Color(0xFF9E9B94),
+        },
+        {
+          'text': 'Pregunto si es real',
+          'description': 'Busco la verdad antes de actuar',
+          'factionPoints': {'Verdad': 4},
+          'color': Color(0xFF534AB7),
+        },
+      ],
+    },
   ];
 
   Map<String, dynamic> get currentQuestionData => questions[currentQuestion - 1];
@@ -199,13 +233,13 @@ class _TestScreenState extends State<TestScreen> {
       _isAnswered = true;
       _timer?.cancel();
       
-      // Acumular puntos (sin mostrar mensaje)
+      // Acumular puntos
       points.forEach((faction, value) {
         totalPoints[faction] = (totalPoints[faction] ?? 0) + value;
       });
     });
     
-    // Mostrar solo feedback visual sin puntos
+    // Mostrar solo feedback visual
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: const Text('✓ Respuesta guardada'),
@@ -237,7 +271,7 @@ class _TestScreenState extends State<TestScreen> {
     // Encontrar la facción con mayor puntuación
     String topFaction = totalPoints.entries.reduce((a, b) => a.value > b.value ? a : b).key;
     
-    // Verificar si es Divergente (puntuación en 2+ facciones)
+    // Verificar si es Divergente
     int highScoresCount = totalPoints.values.where((score) => score >= 4).length;
     bool isDivergent = highScoresCount >= 2;
     
