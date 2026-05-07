@@ -267,13 +267,11 @@ class _TestScreenState extends State<TestScreen> {
       _isAnswered = true;
       _timer?.cancel();
       
-      // Acumular puntos
       points.forEach((faction, value) {
         totalPoints[faction] = (totalPoints[faction] ?? 0) + value;
       });
     });
     
-    // Mostrar solo feedback visual
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: const Text('✓ Respuesta guardada'),
@@ -282,7 +280,6 @@ class _TestScreenState extends State<TestScreen> {
       ),
     );
     
-    // Esperar y pasar a la siguiente
     Future.delayed(const Duration(milliseconds: 800), () {
       if (currentQuestion < totalQuestions) {
         _goToNextQuestion();
@@ -302,32 +299,22 @@ class _TestScreenState extends State<TestScreen> {
   }
 
   void _showResults() {
-    // Filtrar facciones con puntuación > 0
     final filteredPoints = Map.fromEntries(
       totalPoints.entries.where((entry) => entry.value > 0)
     );
     
-    // Ordenar por puntuación de mayor a menor
     final sortedEntries = filteredPoints.entries.toList()
       ..sort((a, b) => b.value.compareTo(a.value));
     
-    // Encontrar la facción con mayor puntuación
     final topFaction = sortedEntries.isNotEmpty ? sortedEntries.first.key : 'Divergente';
     final topScore = sortedEntries.isNotEmpty ? sortedEntries.first.value : 0;
-    
-    // Encontrar segunda facción más alta (si existe)
-    final secondFaction = sortedEntries.length > 1 ? sortedEntries[1].key : null;
     final secondScore = sortedEntries.length > 1 ? sortedEntries[1].value : 0;
     
-    // Determinar si es Divergente:
-    // 1. Puntuación alta en 2+ facciones (puntuación >= 6 en al menos dos)
-    // 2. O la diferencia entre primera y segunda es menor a 3 puntos
     final highScoresCount = totalPoints.values.where((score) => score >= 6).length;
     final isDivergentByHighScore = highScoresCount >= 2;
     final isDivergentByCloseScore = secondScore > 0 && (topScore - secondScore) < 3;
     final isDivergent = isDivergentByHighScore || isDivergentByCloseScore || topFaction == 'Divergente';
     
-    // Facción final a mostrar
     final finalFaction = isDivergent ? 'Divergente' : topFaction;
     
     showDialog(
@@ -385,76 +372,6 @@ class _TestScreenState extends State<TestScreen> {
                     ),
                   ),
                 ],
-                const SizedBox(height: 20),
-                Container(
-                  height: 1,
-                  color: Colors.white.withOpacity(0.1),
-                ),
-                const SizedBox(height: 16),
-                const Text(
-                  'Puntuación obtenida:',
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: Color(0xFF8899AA),
-                  ),
-                ),
-                const SizedBox(height: 8),
-                ...sortedEntries.map((entry) {
-                  final percentage = (entry.value / 20 * 100).toInt();
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 4),
-                    child: Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              children: [
-                                Container(
-                                  width: 10,
-                                  height: 10,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: _getFactionColor(entry.key),
-                                  ),
-                                ),
-                                const SizedBox(width: 8),
-                                Text(
-                                  entry.key,
-                                  style: const TextStyle(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w500,
-                                    color: Colors.white70,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Text(
-                              '${entry.value} pts',
-                              style: TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold,
-                                color: _getFactionColor(entry.key),
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 4),
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(4),
-                          child: LinearProgressIndicator(
-                            value: entry.value / 20,
-                            backgroundColor: Colors.white.withOpacity(0.1),
-                            valueColor: AlwaysStoppedAnimation<Color>(
-                              _getFactionColor(entry.key),
-                            ),
-                            minHeight: 4,
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                }),
                 const SizedBox(height: 24),
                 SizedBox(
                   width: double.infinity,
@@ -517,7 +434,6 @@ class _TestScreenState extends State<TestScreen> {
             size: MediaQuery.of(context).size,
             painter: TestBackgroundPainter(),
           ),
-
           SafeArea(
             child: Column(
               children: [
@@ -591,9 +507,7 @@ class _TestScreenState extends State<TestScreen> {
                     ],
                   ),
                 ),
-
                 const SizedBox(height: 16),
-
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: LinearProgressIndicator(
@@ -606,9 +520,7 @@ class _TestScreenState extends State<TestScreen> {
                     borderRadius: BorderRadius.circular(2),
                   ),
                 ),
-
                 const SizedBox(height: 32),
-
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Column(
@@ -675,9 +587,7 @@ class _TestScreenState extends State<TestScreen> {
                     ],
                   ),
                 ),
-
                 const SizedBox(height: 32),
-
                 Expanded(
                   child: ListView.separated(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -813,7 +723,6 @@ class _TestScreenState extends State<TestScreen> {
                     },
                   ),
                 ),
-
                 const SizedBox(height: 20),
               ],
             ),
