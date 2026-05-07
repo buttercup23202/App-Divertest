@@ -1,64 +1,48 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-
-void main() {
-  runApp(const DivergentApp());
-}
-
-class DivergentApp extends StatelessWidget {
-  const DivergentApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Divergente - Facciones',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData.dark().copyWith(
-        scaffoldBackgroundColor: const Color(0xFF0D1B2A),
-      ),
-      home: const FaccionesScreen(),
-    );
-  }
-}
 
 class FaccionesScreen extends StatelessWidget {
   const FaccionesScreen({super.key});
 
-  // Lista de datos de las 6 facciones
   final List<Map<String, dynamic>> facciones = const [
     {
       'nombre': 'Osadía',
-      'desc': 'El miedo es el enemigo. Vivir es conquistarlo cada día.',
+      'desc':
+          'El miedo es el enemigo. Vivir es conquistarlo cada día.',
       'color': Color(0xFFD85A30),
       'icon': Icons.bolt,
     },
     {
       'nombre': 'Erudición',
-      'desc': 'La ignorancia es la raíz de todos los males. El conocimiento es la única salvación.',
+      'desc':
+          'La ignorancia es la raíz de todos los males. El conocimiento es la única salvación.',
       'color': Color(0xFF185FA5),
       'icon': Icons.menu_book_outlined,
     },
     {
       'nombre': 'Abnegación',
-      'desc': 'El egoísmo destruye la sociedad. Existir para los demás, no para uno mismo.',
+      'desc':
+          'El egoísmo destruye la sociedad. Existir para los demás, no para uno mismo.',
       'color': Color(0xFF9E9B94),
       'icon': Icons.volunteer_activism_outlined,
     },
     {
       'nombre': 'Verdad',
-      'desc': 'La mentira corrompe todo. La honestidad radical, aunque duela, es el único camino.',
+      'desc':
+          'La mentira corrompe todo. La honestidad radical, aunque duela, es el único camino.',
       'color': Color(0xFF534AB7),
       'icon': Icons.balance_outlined,
     },
     {
       'nombre': 'Amabilidad',
-      'desc': 'La agresión nace de la ignorancia. La paz y la armonía son la respuesta a todo conflicto.',
+      'desc':
+          'La agresión nace de la ignorancia. La paz y la armonía son la respuesta a todo conflicto.',
       'color': Color(0xFF3B6D11),
       'icon': Icons.spa_outlined,
     },
     {
       'nombre': 'Divergente',
-      'desc': 'No cabe en una sola caja. Su mente pertenece a varios mundos a la vez, y por eso el sistema los teme.',
+      'desc':
+          'No cabe en una sola caja. Su mente pertenece a varios mundos a la vez, y por eso el sistema los teme.',
       'color': Color(0xFFC0A060),
       'icon': Icons.all_inclusive_outlined,
     },
@@ -71,11 +55,29 @@ class FaccionesScreen extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            // ========== HEADER SUPERIOR ==========
-            const SizedBox(height: 32),
+            const SizedBox(height: 24),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Row(
+                children: [
+                  IconButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    icon: const Icon(
+                      Icons.arrow_back_ios,
+                      size: 18,
+                      color: Color(0xFF8A9BB0),
+                    ),
+                  ),
+                  const Spacer(),
+                ],
+              ),
+            ),
+            const SizedBox(height: 8),
             Text(
               'LAS FACCIONES',
-              style: GoogleFonts.montserrat(
+              style: TextStyle(
                 fontSize: 11,
                 letterSpacing: 5,
                 fontWeight: FontWeight.w300,
@@ -83,16 +85,15 @@ class FaccionesScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 8),
-            Text(
+            const Text(
               'Conoce tu mundo',
-              style: GoogleFonts.raleway(
+              style: TextStyle(
                 fontSize: 22,
                 fontWeight: FontWeight.w700,
                 color: Colors.white,
               ),
             ),
             const SizedBox(height: 4),
-            // Línea decorativa
             Container(
               width: 40,
               height: 1.5,
@@ -100,7 +101,6 @@ class FaccionesScreen extends StatelessWidget {
             ),
             const SizedBox(height: 24),
 
-            // ========== LISTA DE FACCIONES ==========
             Expanded(
               child: ListView.separated(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -128,7 +128,6 @@ class FaccionesScreen extends StatelessWidget {
                           color: colorFaccion.withOpacity(0.15),
                           blurRadius: 12,
                           spreadRadius: 0,
-                          offset: const Offset(0, 2),
                         ),
                       ],
                     ),
@@ -138,7 +137,6 @@ class FaccionesScreen extends StatelessWidget {
                     ),
                     child: Row(
                       children: [
-                        // Círculo con icono de facción
                         Container(
                           width: 52,
                           height: 52,
@@ -155,14 +153,13 @@ class FaccionesScreen extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(width: 16),
-                        // Texto de nombre y descripción
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
                                 nombre,
-                                style: GoogleFonts.raleway(
+                                style: TextStyle(
                                   fontSize: 15,
                                   fontWeight: FontWeight.w700,
                                   color: colorFaccion,
@@ -171,10 +168,10 @@ class FaccionesScreen extends StatelessWidget {
                               const SizedBox(height: 5),
                               Text(
                                 descripcion,
-                                style: GoogleFonts.raleway(
+                                style: const TextStyle(
                                   fontSize: 12.5,
                                   fontWeight: FontWeight.w300,
-                                  color: const Color(0xFFB0BEC5),
+                                  color: Color(0xFFB0BEC5),
                                   height: 1.55,
                                 ),
                               ),
@@ -188,7 +185,6 @@ class FaccionesScreen extends StatelessWidget {
               ),
             ),
 
-            // ========== BOTÓN DE SIGUIENTE ==========
             Padding(
               padding: const EdgeInsets.fromLTRB(20, 16, 20, 28),
               child: SizedBox(
@@ -196,10 +192,10 @@ class FaccionesScreen extends StatelessWidget {
                 height: 54,
                 child: ElevatedButton(
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => const TestScreen(),
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('El test comenzará pronto'),
+                        backgroundColor: Color(0xFFD85A30),
                       ),
                     );
                   },
@@ -214,20 +210,20 @@ class FaccionesScreen extends StatelessWidget {
                     ),
                     elevation: 0,
                   ),
-                  child: Row(
+                  child: const Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
                         'COMENZAR TEST',
-                        style: GoogleFonts.raleway(
+                        style: TextStyle(
                           fontSize: 13,
                           fontWeight: FontWeight.w600,
                           letterSpacing: 2.5,
                           color: Colors.white,
                         ),
                       ),
-                      const SizedBox(width: 10),
-                      const Icon(
+                      SizedBox(width: 10),
+                      Icon(
                         Icons.arrow_forward_ios_rounded,
                         size: 14,
                         color: Colors.white,
@@ -238,28 +234,6 @@ class FaccionesScreen extends StatelessWidget {
               ),
             ),
           ],
-        ),
-      ),
-    );
-  }
-}
-
-// Pantalla temporal para el test (placeholder)
-class TestScreen extends StatelessWidget {
-  const TestScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFF0D1B2A),
-      body: Center(
-        child: Text(
-          'Test próximamente',
-          style: GoogleFonts.raleway(
-            fontSize: 18,
-            color: Colors.white,
-            fontWeight: FontWeight.w300,
-          ),
         ),
       ),
     );
