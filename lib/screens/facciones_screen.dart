@@ -6,12 +6,12 @@ class FaccionesScreen extends StatelessWidget {
   const FaccionesScreen({super.key});
 
   final List<Map<String, dynamic>> facciones = const [
-    {'nombre': 'OSADÍA', 'frase': 'El miedo es el enemigo', 'descripcion': 'El miedo es el enemigo. Vivir es conquistarlo cada día.', 'color': Color(0xFFD85A30), 'icon': Icons.bolt},
-    {'nombre': 'ERUDICIÓN', 'frase': 'El conocimiento es poder', 'descripcion': 'La ignorancia es la raíz de todos los males. El conocimiento es la única salvación.', 'color': Color(0xFF185FA5), 'icon': Icons.menu_book},
-    {'nombre': 'ABNEGACIÓN', 'frase': 'Vivir para servir', 'descripcion': 'El egoísmo destruye la sociedad. Existir para los demás, no para uno mismo.', 'color': Color(0xFF9E9B94), 'icon': Icons.handshake},
-    {'nombre': 'VERDAD', 'frase': 'La honestidad ante todo', 'descripcion': 'La mentira corrompe todo. La honestidad radical, aunque duela, es el único camino.', 'color': Color(0xFF534AB7), 'icon': Icons.balance},
-    {'nombre': 'AMABILIDAD', 'frase': 'La paz es el camino', 'descripcion': 'La agresión nace de la ignorancia. La paz y la armonía son la respuesta a todo conflicto.', 'color': Color(0xFF3B6D11), 'icon': Icons.spa},
-    {'nombre': 'DIVERGENTE', 'frase': 'No cabes en una caja', 'descripcion': 'No cabe en una sola caja. Su mente pertenece a varios mundos a la vez, y por eso el sistema los teme.', 'color': Color(0xFFC0A060), 'icon': Icons.all_inclusive},
+    {'nombre': 'OSADÍA', 'descripcion': 'El miedo es el enemigo. Vivir es conquistarlo cada día.', 'color': Color(0xFFD85A30), 'icon': Icons.bolt},
+    {'nombre': 'ERUDICIÓN', 'descripcion': 'La ignorancia es la raíz de todos los males. El conocimiento es la única salvación.', 'color': Color(0xFF185FA5), 'icon': Icons.menu_book},
+    {'nombre': 'ABNEGACIÓN', 'descripcion': 'El egoísmo destruye la sociedad. Existir para los demás, no para uno mismo.', 'color': Color(0xFF9E9B94), 'icon': Icons.handshake},
+    {'nombre': 'VERDAD', 'descripcion': 'La mentira corrompe todo. La honestidad radical, aunque duela, es el único camino.', 'color': Color(0xFF534AB7), 'icon': Icons.balance},
+    {'nombre': 'AMABILIDAD', 'descripcion': 'La agresión nace de la ignorancia. La paz y la armonía son la respuesta a todo conflicto.', 'color': Color(0xFF3B6D11), 'icon': Icons.spa},
+    {'nombre': 'DIVERGENTE', 'descripcion': 'No cabe en una sola caja. Su mente pertenece a varios mundos a la vez, y por eso el sistema los teme.', 'color': Color(0xFFC0A060), 'icon': Icons.all_inclusive},
   ];
 
   void _showFactionDialog(BuildContext context, Map<String, dynamic> faccion) {
@@ -113,53 +113,13 @@ class FaccionesScreen extends StatelessWidget {
                             textAlign: TextAlign.center,
                           ),
                           const SizedBox(height: 28),
-                          GestureDetector(
-                            onTap: () => Navigator.pop(context),
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 24,
-                                vertical: 12,
-                              ),
-                              decoration: BoxDecoration(
-                                gradient: LinearGradient(
-                                  colors: [
-                                    colorFaccion.withOpacity(0.2),
-                                    colorFaccion.withOpacity(0.05),
-                                  ],
-                                ),
-                                borderRadius: BorderRadius.circular(30),
-                                border: Border.all(
-                                  color: colorFaccion.withOpacity(0.3),
-                                  width: 0.8,
-                                ),
-                              ),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  const Icon(
-                                    Icons.close,
-                                    size: 16,
-                                    color: Colors.white70,
-                                  ),
-                                  const SizedBox(width: 8),
-                                  Text(
-                                    'CERRAR',
-                                    style: TextStyle(
-                                      fontSize: 11,
-                                      letterSpacing: 2,
-                                      color: colorFaccion.withOpacity(0.8),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
                         ],
                       ),
                     ),
                   ),
                 ),
               ),
+              // Solo botón X (sin botón cerrar)
               Positioned(
                 top: -12,
                 right: -12,
@@ -199,20 +159,11 @@ class FaccionesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final hexSize = screenWidth / 2.8;
-    final hexHeight = hexSize * 0.87;
-    
-    // Posiciones para el panal completo (6 hexágonos)
-    final double centerX = screenWidth / 2;
-    final double centerY = 240;
-    final double offsetX = hexSize * 0.75;
-    final double offsetY = hexHeight * 0.75;
-
     return Scaffold(
       backgroundColor: const Color(0xFF080F1A),
       body: Stack(
         children: [
+          // Fondo con blobs difusos
           CustomPaint(
             size: MediaQuery.of(context).size,
             painter: AuroraBackgroundPainter(),
@@ -247,11 +198,11 @@ class FaccionesScreen extends StatelessWidget {
                     const SizedBox(width: 6),
                     Text(
                       'LAS FACCIONES',
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 10,
                         letterSpacing: 5,
                         fontWeight: FontWeight.w300,
-                        color: const Color(0xFF7A8FA6),
+                        color: Color(0xFF7A8FA6),
                       ),
                     ),
                   ],
@@ -282,95 +233,112 @@ class FaccionesScreen extends StatelessWidget {
                   Container(width: 30, height: 1, color: Colors.white.withOpacity(0.2)),
                 ]),
                 
-                const SizedBox(height: 24),
+                const SizedBox(height: 20),
 
-                // PANAL DE HEXÁGONOS (6 facciones)
-                SizedBox(
-                  height: 380,
-                  child: Stack(
-                    clipBehavior: Clip.none,
-                    children: [
-                      // Arriba - Osadía
-                      Positioned(
-                        left: centerX - hexSize / 2,
-                        top: centerY - hexHeight - 4,
-                        child: _buildHexagonCard(
-                          icono: facciones[0]['icon'] as IconData,
-                          nombre: facciones[0]['nombre'] as String,
-                          color: facciones[0]['color'] as Color,
-                          onTap: () => _showFactionDialog(context, facciones[0]),
+                // Grid de 2x3 CON SCROLL - TRANSPARENTE Y DIFUMINADO
+                Expanded(
+                  child: SingleChildScrollView(
+                    physics: const BouncingScrollPhysics(),
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: Column(
+                      children: [
+                        GridView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            crossAxisSpacing: 16,
+                            mainAxisSpacing: 16,
+                            childAspectRatio: 0.95,
+                          ),
+                          itemCount: facciones.length,
+                          itemBuilder: (context, index) {
+                            final faccion = facciones[index];
+                            final Color colorFaccion = faccion['color'] as Color;
+                            final String nombre = faccion['nombre'] as String;
+                            final String descripcion = faccion['descripcion'] as String;
+                            final IconData icono = faccion['icon'] as IconData;
+                            
+                            return GestureDetector(
+                              onTap: () => _showFactionDialog(context, faccion),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                    begin: Alignment.topLeft,
+                                    end: Alignment.bottomRight,
+                                    colors: [
+                                      colorFaccion.withOpacity(0.2),
+                                      colorFaccion.withOpacity(0.05),
+                                    ],
+                                  ),
+                                  borderRadius: BorderRadius.circular(20),
+                                  border: Border.all(
+                                    color: colorFaccion.withOpacity(0.25),
+                                    width: 0.8,
+                                  ),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: colorFaccion.withOpacity(0.1),
+                                      blurRadius: 16,
+                                      spreadRadius: 0,
+                                    ),
+                                  ],
+                                ),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(20),
+                                  child: BackdropFilter(
+                                    filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(12),
+                                      child: Column(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Icon(
+                                            icono,
+                                            size: 38,
+                                            color: colorFaccion.withOpacity(0.85),
+                                          ),
+                                          const SizedBox(height: 10),
+                                          Text(
+                                            nombre,
+                                            style: TextStyle(
+                                              fontSize: 13,
+                                              fontWeight: FontWeight.bold,
+                                              color: colorFaccion.withOpacity(0.85),
+                                              letterSpacing: 1,
+                                            ),
+                                          ),
+                                          const SizedBox(height: 6),
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(horizontal: 8),
+                                            child: Text(
+                                              descripcion.length > 55 ? '${descripcion.substring(0, 55)}...' : descripcion,
+                                              style: TextStyle(
+                                                fontSize: 10,
+                                                color: Colors.white.withOpacity(0.5),
+                                                height: 1.3,
+                                              ),
+                                              textAlign: TextAlign.center,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
                         ),
-                      ),
-                      
-                      // Arriba Derecha - Erudición
-                      Positioned(
-                        left: centerX + offsetX - hexSize / 2,
-                        top: centerY - offsetY - 4,
-                        child: _buildHexagonCard(
-                          icono: facciones[1]['icon'] as IconData,
-                          nombre: facciones[1]['nombre'] as String,
-                          color: facciones[1]['color'] as Color,
-                          onTap: () => _showFactionDialog(context, facciones[1]),
-                        ),
-                      ),
-                      
-                      // Derecha - Abnegación
-                      Positioned(
-                        left: centerX + offsetX - hexSize / 2,
-                        top: centerY + offsetY - 4,
-                        child: _buildHexagonCard(
-                          icono: facciones[2]['icon'] as IconData,
-                          nombre: facciones[2]['nombre'] as String,
-                          color: facciones[2]['color'] as Color,
-                          onTap: () => _showFactionDialog(context, facciones[2]),
-                        ),
-                      ),
-                      
-                      // Abajo - Verdad
-                      Positioned(
-                        left: centerX - hexSize / 2,
-                        top: centerY + hexHeight + 4,
-                        child: _buildHexagonCard(
-                          icono: facciones[3]['icon'] as IconData,
-                          nombre: facciones[3]['nombre'] as String,
-                          color: facciones[3]['color'] as Color,
-                          onTap: () => _showFactionDialog(context, facciones[3]),
-                        ),
-                      ),
-                      
-                      // Abajo Izquierda - Amabilidad
-                      Positioned(
-                        left: centerX - offsetX - hexSize / 2,
-                        top: centerY + offsetY - 4,
-                        child: _buildHexagonCard(
-                          icono: facciones[4]['icon'] as IconData,
-                          nombre: facciones[4]['nombre'] as String,
-                          color: facciones[4]['color'] as Color,
-                          onTap: () => _showFactionDialog(context, facciones[4]),
-                        ),
-                      ),
-                      
-                      // Centro - Divergente
-                      Positioned(
-                        left: centerX - hexSize / 2,
-                        top: centerY - hexHeight / 2,
-                        child: _buildHexagonCard(
-                          icono: facciones[5]['icon'] as IconData,
-                          nombre: facciones[5]['nombre'] as String,
-                          color: facciones[5]['color'] as Color,
-                          onTap: () => _showFactionDialog(context, facciones[5]),
-                          isCenter: true,
-                        ),
-                      ),
-                    ],
+                        const SizedBox(height: 16),
+                      ],
+                    ),
                   ),
                 ),
 
-                const Spacer(),
-
                 // Botón COMENZAR TEST
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+                  padding: const EdgeInsets.fromLTRB(20, 8, 20, 20),
                   child: GestureDetector(
                     onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const TestScreen())),
                     child: Container(
@@ -419,97 +387,6 @@ class FaccionesScreen extends StatelessWidget {
       ),
     );
   }
-
-  Widget _buildHexagonCard({
-    required IconData icono,
-    required String nombre,
-    required Color color,
-    required VoidCallback onTap,
-    bool isCenter = false,
-  }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        width: isCenter ? 110 : 95,
-        height: isCenter ? 127 : 110,
-        child: ClipPath(
-          clipper: HexagonClipper(),
-          child: Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [
-                  color.withOpacity(isCenter ? 0.35 : 0.25),
-                  color.withOpacity(isCenter ? 0.15 : 0.08),
-                ],
-              ),
-              border: Border.all(
-                color: color.withOpacity(isCenter ? 0.5 : 0.35),
-                width: isCenter ? 1.5 : 1,
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: color.withOpacity(isCenter ? 0.3 : 0.15),
-                  blurRadius: isCenter ? 16 : 12,
-                  spreadRadius: isCenter ? 2 : 0,
-                ),
-              ],
-            ),
-            child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    icono,
-                    size: isCenter ? 30 : 26,
-                    color: color.withOpacity(0.9),
-                  ),
-                  const SizedBox(height: 6),
-                  Text(
-                    nombre,
-                    style: TextStyle(
-                      fontSize: isCenter ? 10 : 8.5,
-                      fontWeight: FontWeight.w600,
-                      color: color.withOpacity(0.9),
-                      letterSpacing: 0.8,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-// Clipper para forma de hexágono
-class HexagonClipper extends CustomClipper<Path> {
-  @override
-  Path getClip(Size size) {
-    final double width = size.width;
-    final double height = size.height;
-    final double side = width / 2;
-    final Path path = Path();
-    
-    path.moveTo(side, 0);
-    path.lineTo(width, height * 0.25);
-    path.lineTo(width, height * 0.75);
-    path.lineTo(side, height);
-    path.lineTo(0, height * 0.75);
-    path.lineTo(0, height * 0.25);
-    path.close();
-    
-    return path;
-  }
-
-  @override
-  bool shouldReclip(covariant CustomClipper<Path> oldClipper) => false;
 }
 
 class AuroraBackgroundPainter extends CustomPainter {
