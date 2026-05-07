@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:math';
 
 void main() {
   runApp(const DivergentTestApp());
@@ -10,244 +11,450 @@ class DivergentTestApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Test Divergente',
-      theme: ThemeData(
-        fontFamily: 'Georgia',
-        useMaterial3: true,
-        brightness: Brightness.light,
+      title: 'El Mundo de Divergente',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData.dark().copyWith(
+        scaffoldBackgroundColor: Colors.black,
       ),
       home: const WelcomeScreen(),
-      debugShowCheckedModeBanner: false,
     );
   }
 }
 
-class WelcomeScreen extends StatelessWidget {
+class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({super.key});
+
+  @override
+  State<WelcomeScreen> createState() => _WelcomeScreenState();
+}
+
+class _WelcomeScreenState extends State<WelcomeScreen>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _pulseController;
+  late Animation<double> _pulseAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _pulseController = AnimationController(
+      duration: const Duration(milliseconds: 2000),
+      vsync: this,
+    )..repeat(reverse: true);
+    _pulseAnimation = Tween<double>(begin: 1.0, end: 1.03).animate(
+      CurvedAnimation(parent: _pulseController, curve: Curves.easeInOut),
+    );
+  }
+
+  @override
+  void dispose() {
+    _pulseController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF1A2A3A), // Azul sobrio profundo
-      body: SafeArea(
-        child: Center(
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(24.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  // Título
-                  const Text(
-                    'EL MUNDO DE',
-                    style: TextStyle(
-                      fontSize: 11,
-                      fontWeight: FontWeight.w300,
-                      letterSpacing: 4,
-                      color: Color(0xFFA0B8CC),
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Color(0xFF0D1520),
+              Color(0xFF000000),
+            ],
+          ),
+        ),
+        child: Stack(
+          children: [
+            // Fondo estático con partículas
+            const BackgroundParticles(),
+            
+            // Contenido principal
+            SafeArea(
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const SizedBox(height: 20),
+                    
+                    // Título
+                    const Text(
+                      'EL MUNDO DE',
+                      style: TextStyle(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w300,
+                        letterSpacing: 4,
+                        color: Color(0xFF8A9BB0),
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 6),
-                  const Text(
-                    'DIVERGENTE',
-                    style: TextStyle(
-                      fontSize: 28,
-                      fontWeight: FontWeight.w300,
-                      letterSpacing: 6,
-                      color: Color(0xFFE8F0F8),
+                    const SizedBox(height: 6),
+                    
+                    ShaderMask(
+                      shaderCallback: (bounds) => const LinearGradient(
+                        colors: [
+                          Color(0xFFD0D8E8),
+                          Color(0xFF8A9BB0),
+                          Color(0xFFD0D8E8),
+                        ],
+                      ).createShader(Rect.fromLTWH(0, 0, bounds.width, bounds.height)),
+                      child: const Text(
+                        'DIVERGENTE',
+                        style: TextStyle(
+                          fontSize: 36,
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 8,
+                          color: Colors.white,
+                        ),
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 32),
+                    const SizedBox(height: 50),
 
-                  // Círculo cromático con facciones
-                  SizedBox(
-                    width: 340,
-                    height: 340,
-                    child: Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        // Anillo exterior de facciones
-                        ..._buildFactionCircles(),
-                        
-                        // Círculo central (el test)
-                        GestureDetector(
-                          onTap: () {
-                            // Aquí navegaremos al test
-                          },
-                          child: Container(
-                            width: 140,
-                            height: 140,
-                            decoration: BoxDecoration(
-                              color: const Color(0xFF2A3A4A),
-                              shape: BoxShape.circle,
-                              border: Border.all(
-                                color: const Color(0xFF5A7A9A),
-                                width: 0.8,
-                              ),
-                            ),
-                            child: const Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  '✧',
-                                  style: TextStyle(
-                                    fontSize: 28,
-                                    color: Color(0xFFC4D8E8),
-                                  ),
-                                ),
-                                SizedBox(height: 8),
-                                Text(
-                                  'TEST DE\nAPTITUD',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize: 11,
-                                    fontWeight: FontWeight.w400,
-                                    letterSpacing: 1.5,
-                                    color: Color(0xFFC4D8E8),
-                                  ),
-                                ),
-                                SizedBox(height: 6),
-                                Text(
-                                  'comenzar',
-                                  style: TextStyle(
-                                    fontSize: 9,
-                                    fontWeight: FontWeight.w300,
-                                    letterSpacing: 1,
-                                    color: Color(0xFF8AACCA),
-                                  ),
+                    // Gran hexágono central
+                    SizedBox(
+                      width: 360,
+                      height: 360,
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          // Hexágono base de fondo
+                          Container(
+                            width: 340,
+                            height: 340,
+                            decoration: ShapeDecoration(
+                              shape: const HexagonShape(),
+                              color: const Color(0xFF0A1520).withOpacity(0.5),
+                              shadows: [
+                                BoxShadow(
+                                  color: const Color(0xFF1A3A5A).withOpacity(0.3),
+                                  blurRadius: 30,
+                                  spreadRadius: 10,
                                 ),
                               ],
                             ),
                           ),
+                          
+                          // Hexágonos de facciones alrededor
+                          ..._buildFactionHexagons(),
+                          
+                          // Botón central hexagonal con animación de pulso
+                          AnimatedBuilder(
+                            animation: _pulseAnimation,
+                            builder: (context, child) {
+                              return Transform.scale(
+                                scale: _pulseAnimation.value,
+                                child: GestureDetector(
+                                  onTap: () {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(content: Text('Test comenzará pronto')),
+                                    );
+                                  },
+                                  child: Container(
+                                    width: 130,
+                                    height: 130,
+                                    decoration: ShapeDecoration(
+                                      shape: const HexagonShape(),
+                                      gradient: const LinearGradient(
+                                        begin: Alignment.topLeft,
+                                        end: Alignment.bottomRight,
+                                        colors: [
+                                          Color(0xFF2A3A4A),
+                                          Color(0xFF1A2A3A),
+                                        ],
+                                      ),
+                                      shadows: [
+                                        BoxShadow(
+                                          color: const Color(0xFF4A6A8A).withOpacity(0.4),
+                                          blurRadius: 15,
+                                          spreadRadius: 3,
+                                        ),
+                                      ],
+                                    ),
+                                    child: const Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Icon(
+                                          Icons.hexagon,
+                                          size: 30,
+                                          color: Color(0xFF8A9BB0),
+                                        ),
+                                        SizedBox(height: 8),
+                                        Text(
+                                          'TEST DE\nAPTITUD',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            fontSize: 11,
+                                            fontWeight: FontWeight.bold,
+                                            letterSpacing: 1,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                        SizedBox(height: 6),
+                                        Text(
+                                          'COMENZAR',
+                                          style: TextStyle(
+                                            fontSize: 8,
+                                            fontWeight: FontWeight.w300,
+                                            letterSpacing: 1.5,
+                                            color: Color(0xFF8A9BB0),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    const SizedBox(height: 60),
+
+                    // Footer
+                    const Column(
+                      children: [
+                        Text(
+                          'Una elección puede transformarte',
+                          style: TextStyle(
+                            fontSize: 10,
+                            fontStyle: FontStyle.italic,
+                            letterSpacing: 1,
+                            color: Color(0x80A0B8CC),
+                          ),
+                        ),
+                        SizedBox(height: 10),
+                        Text(
+                          '#DIVERGENTE',
+                          style: TextStyle(
+                            fontSize: 9,
+                            fontWeight: FontWeight.w300,
+                            letterSpacing: 4,
+                            color: Color(0x60A0B8CC),
+                          ),
                         ),
                       ],
                     ),
-                  ),
+                    const SizedBox(height: 20),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 
-                  const SizedBox(height: 48),
+  List<Widget> _buildFactionHexagons() {
+    const List<FactionHexData> factions = [
+      FactionHexData('OSADÍA', Icons.flash_on, Color(0xFFB84A2A)),
+      FactionHexData('ERUDICIÓN', Icons.menu_book, Color(0xFF144A7A)),
+      FactionHexData('ABNEGACIÓN', Icons.handshake, Color(0xFF7A7870)),
+      FactionHexData('VERDAD', Icons.account_balance, Color(0xFF4A4290)),
+      FactionHexData('AMABILIDAD', Icons.eco, Color(0xFF2A5A10)),
+      FactionHexData('DIVERGENTE', Icons.brightness_auto, Color(0xFFA09050)),
+    ];
 
-                  // Frase inferior
-                  const Text(
-                    'UNA ELECCIÓN PUEDE TRANSFORMARTE',
-                    style: TextStyle(
-                      fontSize: 9,
-                      fontWeight: FontWeight.w300,
-                      letterSpacing: 2,
-                      color: Color(0xFF6A8AAA),
-                    ),
+    // Posiciones para los hexágonos alrededor del centro
+    const List<Offset> positions = [
+      Offset(0, -125),     // Osadía (arriba)
+      Offset(108, -62),    // Erudición (derecha arriba)
+      Offset(108, 62),     // Abnegación (derecha abajo)
+      Offset(0, 125),      // Verdad (abajo)
+      Offset(-108, 62),    // Amabilidad (izquierda abajo)
+      Offset(-108, -62),   // Divergente (izquierda arriba)
+    ];
+
+    List<Widget> hexagons = [];
+    for (int i = 0; i < positions.length; i++) {
+      hexagons.add(
+        Positioned(
+          left: 180 + positions[i].dx - 40,
+          top: 180 + positions[i].dy - 40,
+          child: FloatingHexagon(
+            faction: factions[i],
+            delay: Duration(milliseconds: i * 200),
+          ),
+        ),
+      );
+    }
+    return hexagons;
+  }
+}
+
+class FactionHexData {
+  final String name;
+  final IconData icon;
+  final Color color;
+
+  const FactionHexData(this.name, this.icon, this.color);
+}
+
+class FloatingHexagon extends StatefulWidget {
+  final FactionHexData faction;
+  final Duration delay;
+
+  const FloatingHexagon({super.key, required this.faction, required this.delay});
+
+  @override
+  State<FloatingHexagon> createState() => _FloatingHexagonState();
+}
+
+class _FloatingHexagonState extends State<FloatingHexagon>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _floatController;
+  late Animation<double> _floatAnimation;
+  bool isHovered = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _floatController = AnimationController(
+      duration: const Duration(milliseconds: 3000),
+      vsync: this,
+    )..repeat(reverse: true);
+    _floatAnimation = Tween<double>(begin: -5, end: -15).animate(
+      CurvedAnimation(
+        parent: _floatController,
+        curve: Curves.easeInOut,
+      ),
+    );
+    Future.delayed(widget.delay, () {
+      if (mounted) _floatController.forward();
+    });
+  }
+
+  @override
+  void dispose() {
+    _floatController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _floatAnimation,
+      builder: (context, child) {
+        return Transform.translate(
+          offset: Offset(0, _floatAnimation.value),
+          child: MouseRegion(
+            onEnter: (_) => setState(() => isHovered = true),
+            onExit: (_) => setState(() => isHovered = false),
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 200),
+              width: isHovered ? 85 : 80,
+              height: isHovered ? 85 : 80,
+              decoration: ShapeDecoration(
+                shape: const HexagonShape(),
+                color: widget.faction.color.withOpacity(0.7),
+                shadows: [
+                  BoxShadow(
+                    color: widget.faction.color.withOpacity(isHovered ? 0.6 : 0.3),
+                    blurRadius: isHovered ? 18 : 10,
+                    spreadRadius: isHovered ? 3 : 0,
                   ),
-                  const SizedBox(height: 12),
-                  const Text(
-                    '#DIVERGENTE',
+                ],
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    widget.faction.icon,
+                    color: Colors.white.withOpacity(0.9),
+                    size: isHovered ? 30 : 26,
+                  ),
+                  const SizedBox(height: 6),
+                  Text(
+                    widget.faction.name,
                     style: TextStyle(
-                      fontSize: 10,
-                      fontWeight: FontWeight.w400,
-                      letterSpacing: 2,
-                      color: Color(0xFF4A6A8A),
+                      fontSize: isHovered ? 10 : 9,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white.withOpacity(0.9),
                     ),
+                    textAlign: TextAlign.center,
                   ),
                 ],
               ),
             ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
+}
 
-  List<Widget> _buildFactionCircles() {
-    const List<FactionData> factions = [
-      FactionData('AMABILIDAD', '🌿', Color(0xFF6B9E7A)),
-      FactionData('ERUDICIÓN', '📖', Color(0xFF5B8BB0)),
-      FactionData('OSADÍA', '⚡', Color(0xFFC47A5A)),
-      FactionData('VERDAD', '⚖️', Color(0xFFB8A45A)),
-      FactionData('ABNEGACIÓN', '🕯️', Color(0xFF9B8B70)),
-      FactionData('DIVERGENTE', '🌀', Color(0xFFC49A8B)),
-    ];
+// HexagonShape corregido y completo
+class HexagonShape extends ShapeBorder {
+  const HexagonShape();
 
-    List<Widget> circles = [];
-    
-    // Posiciones manuales para mejor distribución circular
-    const List<Offset> positions = [
-      Offset(0, -130),     // Amabilidad (arriba)
-      Offset(112, -65),    // Erudición (derecha arriba)
-      Offset(112, 65),     // Osadía (derecha abajo)
-      Offset(0, 130),      // Verdad (abajo)
-      Offset(-112, 65),    // Abnegación (izquierda abajo)
-      Offset(-112, -65),   // Divergente (izquierda arriba)
-    ];
-    
-    for (int i = 0; i < positions.length; i++) {
-      circles.add(
-        Positioned(
-          left: 170 + positions[i].dx - 40,
-          top: 170 + positions[i].dy - 40,
-          child: _FactionCircle(
-            faction: factions[i],
-          ),
-        ),
-      );
-    }
-    
-    return circles;
+  @override
+  EdgeInsetsGeometry get dimensions => EdgeInsets.zero;
+
+  @override
+  Path getOuterPath(Rect rect, {TextDirection? textDirection}) {
+    final double width = rect.width;
+    final double height = rect.height;
+    final double side = width / 2;
+    final Path path = Path();
+    path.moveTo(rect.left + side, rect.top);
+    path.lineTo(rect.right, rect.top + height * 0.25);
+    path.lineTo(rect.right, rect.top + height * 0.75);
+    path.lineTo(rect.left + side, rect.bottom);
+    path.lineTo(rect.left, rect.top + height * 0.75);
+    path.lineTo(rect.left, rect.top + height * 0.25);
+    path.close();
+    return path;
   }
+
+  @override
+  Path getInnerPath(Rect rect, {TextDirection? textDirection}) {
+    return getOuterPath(rect, textDirection: textDirection);
+  }
+
+  @override
+  void paint(Canvas canvas, Rect rect, {TextDirection? textDirection}) {}
+
+  @override
+  ShapeBorder scale(double t) => const HexagonShape();
 }
 
-class FactionData {
-  final String name;
-  final String emoji;
-  final Color color;
-  
-  const FactionData(this.name, this.emoji, this.color);
-}
-
-class _FactionCircle extends StatelessWidget {
-  final FactionData faction;
-  
-  const _FactionCircle({required this.faction});
+// Fondo estático con partículas (sin animación compleja)
+class BackgroundParticles extends StatelessWidget {
+  const BackgroundParticles({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 80,
-      height: 80,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: faction.color.withOpacity(0.85), // Mucho menos transparente
-        border: Border.all(
-          color: faction.color.withOpacity(0.9),
-          width: 1.5,
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: faction.color.withOpacity(0.3),
-            blurRadius: 6,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            faction.emoji,
-            style: const TextStyle(fontSize: 28),
-          ),
-          const SizedBox(height: 6),
-          Text(
-            faction.name,
-            style: TextStyle(
-              fontSize: 10,
-              fontWeight: faction.name == 'DIVERGENTE' ? FontWeight.w700 : FontWeight.w600,
-              letterSpacing: 1,
-              color: faction.name == 'DIVERGENTE' 
-                  ? Colors.white 
-                  : const Color(0xFFF0F4F8),
-            ),
-            textAlign: TextAlign.center,
-          ),
-        ],
-      ),
+    return CustomPaint(
+      painter: ParticlePainter(),
+      size: Size.infinite,
     );
   }
+}
+
+class ParticlePainter extends CustomPainter {
+  final Random random = Random(42);
+  
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = const Color(0xFF4A6A8A).withOpacity(0.06)
+      ..style = PaintingStyle.fill;
+    
+    // Dibujar partículas estáticas en toda la pantalla
+    for (int i = 0; i < 100; i++) {
+      final x = random.nextDouble() * size.width;
+      final y = random.nextDouble() * size.height;
+      
+      canvas.drawCircle(
+        Offset(x, y),
+        1 + random.nextDouble() * 2,
+        paint,
+      );
+    }
+  }
+  
+  @override
+  bool shouldRepaint(ParticlePainter oldDelegate) => false;
 }
