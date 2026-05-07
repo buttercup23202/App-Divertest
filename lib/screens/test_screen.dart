@@ -163,6 +163,35 @@ class _TestScreenState extends State<TestScreen> {
     _startTimer();
   }
 
+  void _restartTest() {
+    Navigator.pop(context);
+    Navigator.pop(context);
+    Navigator.pop(context);
+  }
+
+  String _getCuteMessage(String faction, bool isDivergent) {
+    if (isDivergent) {
+      return '🌟 ¡Eres especial! Tu mente brilla en varios mundos 🌟';
+    }
+    
+    switch (faction) {
+      case 'Osadía':
+        return '⚡ Eres valiente como un rayo. ¡El mundo necesita tu coraje! ⚡';
+      case 'Erudición':
+        return '📚 Tu sed de conocimiento es infinita. ¡Nunca dejes de aprender! 📚';
+      case 'Abnegación':
+        return '🤝 Tienes un corazón enorme. Gracias por existir para los demás 🤝';
+      case 'Verdad':
+        return '⚖️ La honestidad es tu superpoder. ¡Siempre con la verdad! ⚖️';
+      case 'Amabilidad':
+        return '🌸 La paz te sigue donde vas. Eres luz en la oscuridad 🌸';
+      case 'Divergente':
+        return '🌈 No cabes en una sola caja. ¡Y eso es hermoso! 🌈';
+      default:
+        return '✨ Eres único y especial. Sigue así ✨';
+    }
+  }
+
   void _showResults() {
     final filteredPoints = Map.fromEntries(totalPoints.entries.where((e) => e.value > 0));
     final sorted = filteredPoints.entries.toList()..sort((a, b) => b.value.compareTo(a.value));
@@ -172,6 +201,7 @@ class _TestScreenState extends State<TestScreen> {
     final isDivergent = (topScore - secondScore) < 3 || topFaction == 'Divergente';
     final finalFaction = isDivergent ? 'Divergente' : topFaction;
     final factionColor = _getFactionColor(finalFaction);
+    final cuteMessage = _getCuteMessage(finalFaction, isDivergent);
 
     showDialog(
       context: context,
@@ -241,7 +271,7 @@ class _TestScreenState extends State<TestScreen> {
                         ),
                         const SizedBox(height: 20),
                         Text(
-                          isDivergent ? '¡ERES DIVERGENTE!' : 'PERTENECES A',
+                          isDivergent ? '🌸 ¡ERES DIVERGENTE! 🌸' : '🏠 PERTENECES A',
                           style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
@@ -254,12 +284,51 @@ class _TestScreenState extends State<TestScreen> {
                           finalFaction,
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                            fontSize: finalFaction == 'Divergente' ? 28 : 36,
+                            fontSize: finalFaction == 'Divergente' ? 26 : 34,
                             fontWeight: FontWeight.bold,
                             color: factionColor,
                           ),
                         ),
+                        const SizedBox(height: 12),
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                          decoration: BoxDecoration(
+                            color: factionColor.withOpacity(0.15),
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Text(
+                            cuteMessage,
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(
+                              fontSize: 13,
+                              color: Colors.white70,
+                              height: 1.4,
+                            ),
+                          ),
+                        ),
                         const SizedBox(height: 28),
+                        SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton(
+                            onPressed: _restartTest,
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: factionColor.withOpacity(0.8),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              padding: const EdgeInsets.symmetric(vertical: 12),
+                            ),
+                            child: const Text(
+                              '🔄 REINICIAR TEST 🔄',
+                              style: TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w600,
+                                letterSpacing: 2,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -270,11 +339,7 @@ class _TestScreenState extends State<TestScreen> {
               top: -12,
               right: -12,
               child: GestureDetector(
-                onTap: () {
-                  Navigator.pop(context);
-                  Navigator.pop(context);
-                  Navigator.pop(context);
-                },
+                onTap: _restartTest,
                 child: Container(
                   width: 32,
                   height: 32,
@@ -323,7 +388,6 @@ class _TestScreenState extends State<TestScreen> {
       backgroundColor: const Color(0xFF080F1A),
       body: Stack(
         children: [
-          // Fondo difuminado
           CustomPaint(
             size: MediaQuery.of(context).size,
             painter: TestBackgroundPainter(),
@@ -375,7 +439,7 @@ class _TestScreenState extends State<TestScreen> {
                       LinearProgressIndicator(
                         value: currentQuestion / totalQuestions,
                         backgroundColor: Colors.white10,
-                        valueColor: const AlwaysStoppedAnimation<Color>(Color(0xFF185FA5)),
+                        valueColor: const AlwaysStoppedAnimation<Color>(Color(0xFF3A5A7A)),
                         minHeight: 3,
                         borderRadius: BorderRadius.circular(4),
                       ),

@@ -119,7 +119,6 @@ class FaccionesScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              // Solo botón X
               Positioned(
                 top: -12,
                 right: -12,
@@ -163,7 +162,6 @@ class FaccionesScreen extends StatelessWidget {
       backgroundColor: const Color(0xFF080F1A),
       body: Stack(
         children: [
-          // Fondo con blobs difusos
           CustomPaint(
             size: MediaQuery.of(context).size,
             painter: AuroraBackgroundPainter(),
@@ -235,7 +233,7 @@ class FaccionesScreen extends StatelessWidget {
                 
                 const SizedBox(height: 20),
 
-                // Grid de 2x3 CON SCROLL - Solo nombre de facción
+                // Grid de 2x3 CON SCROLL
                 Expanded(
                   child: SingleChildScrollView(
                     physics: const BouncingScrollPhysics(),
@@ -322,11 +320,27 @@ class FaccionesScreen extends StatelessWidget {
                   ),
                 ),
 
-                // Botón COMENZAR TEST
+                // Botón COMENZAR TEST CON ANIMACIÓN
                 Padding(
                   padding: const EdgeInsets.fromLTRB(20, 8, 20, 20),
                   child: GestureDetector(
-                    onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const TestScreen())),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        PageRouteBuilder(
+                          pageBuilder: (context, animation, secondaryAnimation) => const TestScreen(),
+                          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                            const begin = Offset(1.0, 0.0);
+                            const end = Offset.zero;
+                            const curve = Curves.easeOutCubic;
+                            var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+                            var offsetAnimation = animation.drive(tween);
+                            return SlideTransition(position: offsetAnimation, child: child);
+                          },
+                          transitionDuration: const Duration(milliseconds: 500),
+                        ),
+                      );
+                    },
                     child: Container(
                       height: 50,
                       decoration: BoxDecoration(
