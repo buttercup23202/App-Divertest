@@ -11,7 +11,7 @@ class TestScreen extends StatefulWidget {
 class _TestScreenState extends State<TestScreen> {
   int selectedOption = -1;
   int currentQuestion = 1;
-  final int totalQuestions = 4;
+  final int totalQuestions = 5;
   
   Timer? _timer;
   int _timeRemaining = 15;
@@ -136,7 +136,7 @@ class _TestScreenState extends State<TestScreen> {
       'title': 'El espejo',
       'description': 'Te encuentras frente a un espejo que no refleja quién eres, sino una versión perfecta de ti mismo. La imagen te sonríe, perfecta y sin defectos.',
       'question': '¿Qué haces al ver esa imagen?',
-      'imageIcon': Icons.brightness_5,  // Icono corregido
+      'imageIcon': Icons.brightness_5,
       'timeLimit': 15,
       'options': [
         {
@@ -162,6 +162,40 @@ class _TestScreenState extends State<TestScreen> {
           'description': 'Busco la verdad antes de actuar',
           'factionPoints': {'Verdad': 4},
           'color': Color(0xFF534AB7),
+        },
+      ],
+    },
+    {
+      'id': 'P3c',
+      'title': 'El fuego',
+      'description': 'Un incendio se desata en el edificio donde te encuentras. La gente entra en pánico. Todos miran hacia ti esperando una dirección.',
+      'question': '¿Cómo lideras en la crisis?',
+      'imageIcon': Icons.local_fire_department,
+      'timeLimit': 15,
+      'options': [
+        {
+          'text': 'Lidero con firmeza',
+          'description': 'Tomo el control y doy órdenes claras',
+          'factionPoints': {'Osadía': 4, 'Abnegación': 1},
+          'color': Color(0xFFD85A30),
+        },
+        {
+          'text': 'Diseño un plan estratégico',
+          'description': 'Analizo la situación y busco la mejor ruta',
+          'factionPoints': {'Erudición': 4},
+          'color': Color(0xFF185FA5),
+        },
+        {
+          'text': 'Ayudo a los vulnerables',
+          'description': 'Me aseguro de que los débiles salgan primero',
+          'factionPoints': {'Abnegación': 3, 'Amabilidad': 3},
+          'color': Color(0xFF9E9B94),
+        },
+        {
+          'text': 'Busco una salida para todos',
+          'description': 'Investigo todas las opciones posibles',
+          'factionPoints': {'Erudición': 3, 'Osadía': 2},
+          'color': Color(0xFF185FA5),
         },
       ],
     },
@@ -268,12 +302,33 @@ class _TestScreenState extends State<TestScreen> {
   }
 
   void _showResults() {
-    // Encontrar la facción con mayor puntuación
-    String topFaction = totalPoints.entries.reduce((a, b) => a.value > b.value ? a : b).key;
+    // Filtrar facciones con puntuación > 0
+    final filteredPoints = Map.fromEntries(
+      totalPoints.entries.where((entry) => entry.value > 0)
+    );
     
-    // Verificar si es Divergente
-    int highScoresCount = totalPoints.values.where((score) => score >= 4).length;
-    bool isDivergent = highScoresCount >= 2;
+    // Ordenar por puntuación de mayor a menor
+    final sortedEntries = filteredPoints.entries.toList()
+      ..sort((a, b) => b.value.compareTo(a.value));
+    
+    // Encontrar la facción con mayor puntuación
+    final topFaction = sortedEntries.isNotEmpty ? sortedEntries.first.key : 'Divergente';
+    final topScore = sortedEntries.isNotEmpty ? sortedEntries.first.value : 0;
+    
+    // Encontrar segunda facción más alta (si existe)
+    final secondFaction = sortedEntries.length > 1 ? sortedEntries[1].key : null;
+    final secondScore = sortedEntries.length > 1 ? sortedEntries[1].value : 0;
+    
+    // Determinar si es Divergente:
+    // 1. Puntuación alta en 2+ facciones (puntuación >= 6 en al menos dos)
+    // 2. O la diferencia entre primera y segunda es menor a 3 puntos
+    final highScoresCount = totalPoints.values.where((score) => score >= 6).length;
+    final isDivergentByHighScore = highScoresCount >= 2;
+    final isDivergentByCloseScore = secondScore > 0 && (topScore - secondScore) < 3;
+    final isDivergent = isDivergentByHighScore || isDivergentByCloseScore || topFaction == 'Divergente';
+    
+    // Facción final a mostrar
+    final finalFaction = isDivergent ? 'Divergente' : topFaction;
     
     showDialog(
       context: context,
@@ -284,7 +339,7 @@ class _TestScreenState extends State<TestScreen> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(24),
             side: BorderSide(
-              color: isDivergent ? const Color(0xFFC0A060) : const Color(0xFF185FA5),
+              color: isDivergent ? const Color(0xFFC0A060) : _getFactionColor(topFaction),
               width: 2,
             ),
           ),
@@ -296,7 +351,7 @@ class _TestScreenState extends State<TestScreen> {
                 Icon(
                   isDivergent ? Icons.all_inclusive : Icons.verified,
                   size: 60,
-                  color: isDivergent ? const Color(0xFFC0A060) : const Color(0xFF185FA5),
+                  color: isDivergent ? const Color(0xFFC0A060) : _getFactionColor(topFaction),
                 ),
                 const SizedBox(height: 20),
                 Text(
@@ -310,16 +365,26 @@ class _TestScreenState extends State<TestScreen> {
                 ),
                 const SizedBox(height: 16),
                 Text(
-                  isDivergent ? 'Tu mente no cabe\nen una sola facción' : topFaction,
+                  finalFaction,
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontSize: isDivergent ? 24 : 32,
+                    fontSize: finalFaction == 'Divergente' ? 28 : 36,
                     fontWeight: FontWeight.bold,
-                    color: isDivergent 
-                        ? const Color(0xFFC0A060) 
-                        : _getFactionColor(topFaction),
+                    letterSpacing: 2,
+                    color: _getFactionColor(finalFaction),
                   ),
                 ),
+                if (isDivergent && topFaction != 'Divergente') ...[
+                  const SizedBox(height: 8),
+                  Text(
+                    'Afinidad principal: $topFaction',
+                    style: const TextStyle(
+                      fontSize: 12,
+                      color: Color(0xFF8899AA),
+                      letterSpacing: 1,
+                    ),
+                  ),
+                ],
                 const SizedBox(height: 20),
                 Container(
                   height: 1,
@@ -334,36 +399,63 @@ class _TestScreenState extends State<TestScreen> {
                   ),
                 ),
                 const SizedBox(height: 8),
-                ...totalPoints.entries.map((entry) {
-                  if (entry.value > 0) {
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 2),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(
-                            width: 8,
-                            height: 8,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: _getFactionColor(entry.key),
+                ...sortedEntries.map((entry) {
+                  final percentage = (entry.value / 20 * 100).toInt();
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 4),
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              children: [
+                                Container(
+                                  width: 10,
+                                  height: 10,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: _getFactionColor(entry.key),
+                                  ),
+                                ),
+                                const SizedBox(width: 8),
+                                Text(
+                                  entry.key,
+                                  style: const TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.white70,
+                                  ),
+                                ),
+                              ],
                             ),
-                          ),
-                          const SizedBox(width: 8),
-                          Text(
-                            '${entry.key}: ${entry.value} pts',
-                            style: const TextStyle(
-                              fontSize: 11,
-                              color: Color(0xFF8899AA),
+                            Text(
+                              '${entry.value} pts',
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                                color: _getFactionColor(entry.key),
+                              ),
                             ),
+                          ],
+                        ),
+                        const SizedBox(height: 4),
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(4),
+                          child: LinearProgressIndicator(
+                            value: entry.value / 20,
+                            backgroundColor: Colors.white.withOpacity(0.1),
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                              _getFactionColor(entry.key),
+                            ),
+                            minHeight: 4,
                           ),
-                        ],
-                      ),
-                    );
-                  }
-                  return const SizedBox.shrink();
+                        ),
+                      ],
+                    ),
+                  );
                 }),
-                const SizedBox(height: 20),
+                const SizedBox(height: 24),
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
@@ -375,7 +467,7 @@ class _TestScreenState extends State<TestScreen> {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: isDivergent 
                           ? const Color(0xFFC0A060) 
-                          : const Color(0xFF185FA5),
+                          : _getFactionColor(topFaction),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
